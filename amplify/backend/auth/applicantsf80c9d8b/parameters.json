@@ -1,0 +1,13 @@
+{
+  "authSelections": "userPoolOnly",
+  "resourceName": "applicantsf80c9d8b",
+  "serviceType": "imported",
+  "region": "sa-east-1",
+  "usernameAttributes": ["email"],
+  "requiredAttributes": [],
+  "passwordPolicyMinLength": 8,
+  "passwordPolicyCharacters": ["Requires Lowercase", "Requires Numbers"],
+  "mfaConfiguration": "OFF",
+  "autoVerifiedAttributes": ["email"],
+  "mfaTypes": []
+}
