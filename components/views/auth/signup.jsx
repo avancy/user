@@ -14,8 +14,6 @@ export default function Signup() {
   const [newUser, setNewUser] = useState({ username: '', password: '' });
   const [step, setStep] = useState(1);
 
-  const deviceType = getDeviceType();
-
   return (
     <div className="flex flex-col items-center justify-center flex-1">
       <div className={`w-full ${step === 1 && 'lg:w-2/3'} flex items-center justify-center`}>
@@ -48,6 +46,12 @@ export default function Signup() {
   );
 }
 
+
+const formatPhoneNumberForAWS = (phoneNumber) => {
+  let cleaned = phoneNumber.replace(/\D/g, '');  
+  return `+${cleaned.length > 11 ? cleaned : '55' + cleaned}`;
+};
+
 function StepOne({ setStep, setNewUser }) {
   const [agreed, setAgreed] = useState(false);
 
@@ -58,18 +62,19 @@ function StepOne({ setStep, setNewUser }) {
     }
 
     try {
-      //   await Auth.signUp({
-      //     username: data.email,
-      //     password: data.password,
-      //     attributes: {
-      //       email: data.email,
-      //       'custom:first_name': data.first_name,
-      //       'custom:last_name': data.last_name,
-      //     },
-      //     autoSignIn: {
-      //       enabled: true,
-      //     },
-      //   });
+      await Auth.signUp({
+        username: data.email,
+        password: data.password,
+        attributes: {
+          email: data.email,
+          phone_number: formatPhoneNumberForAWS(data.phone_number),
+          'custom:first_name': data.first_name,
+          'custom:last_name': data.last_name,
+        },
+        autoSignIn: {
+          enabled: true,
+        },
+      });
 
       Notify.success(
         'Usuário cadastrado com sucesso. Verifique seu e-mail para confirmar o cadastro.',
@@ -99,7 +104,7 @@ function StepOne({ setStep, setNewUser }) {
       width: InputWidth.FULL,
       validation: yup.string().required('Campo Obrigatório'),
     },
-    phoneNumber: {
+    phone_number: {
       type: InputType.TEXT,
       placeholder: 'Telefone',
       labelStyle: LabelStyle.DEFAULT,
