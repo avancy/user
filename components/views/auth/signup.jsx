@@ -2,13 +2,12 @@ import { FormBuilder, InputType, InputWidth, LabelStyle } from '@/components/com
 import EmailConfirmationBanner from '@/public/svgs/banners/email_confirmation.svg';
 import { Notify } from '@/components/common/notification';
 import { AUTH_ERROR_MESSAGES } from '@/constrants/auth';
-import getDeviceType from '@/util/device_detector';
+import { Fragment, useState } from 'react';
+import { useRouter } from 'next/router';
 import { Auth } from 'aws-amplify';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Fragment, useState } from 'react';
 import * as yup from 'yup';
-import { useRouter } from 'next/router';
 
 export default function Signup() {
   const [newUser, setNewUser] = useState({ username: '', password: '' });
@@ -18,22 +17,26 @@ export default function Signup() {
     <div className="flex flex-col items-center justify-center flex-1">
       <div className={`w-full ${step === 1 && 'lg:w-2/3'} flex items-center justify-center`}>
         <div className={`flex flex-col h-full py-3 gap-4 md:gap-6`}>
-          <div className="flex items-center justify-center text-3xl font-montserrat">
-            {[1, 2, 3].map((num, index) => (
-              <Fragment key={num}>
-                <button
-                  onClick={() => num === 1 && setStep(1)}
-                  disabled={num !== 1}
-                  className={`rounded-full w-11 h-11 ${
-                    step >= num ? 'bg-[#24EEA0] font-bold text-black' : 'text-gray-500'
-                  } flex border-2 border-gray-500 justify-center items-center`}
-                >
-                  {num}
-                </button>
-                {index < 2 && <div className="w-[60px] h-[2px] bg-gray-500"></div>}
-              </Fragment>
-            ))}
-          </div>
+          {step === 1 ? (
+            <div className="mt-4 text-4xl font-bold text-center font-montserrat">Cadastre-se</div>
+          ) : (
+            <div className="flex items-center justify-center text-3xl font-montserrat">
+              {[1, 2, 3].map((num, index) => (
+                <Fragment key={num}>
+                  <button
+                    onClick={() => num === 1 && setStep(1)}
+                    disabled={num !== 1}
+                    className={`rounded-full w-11 h-11 ${
+                      step >= num ? 'bg-[#24EEA0] font-bold text-black' : 'text-gray-500'
+                    } flex border-2 border-gray-500 justify-center items-center`}
+                  >
+                    {num}
+                  </button>
+                  {index < 2 && <div className="w-[60px] h-[2px] bg-gray-500"></div>}
+                </Fragment>
+              ))}
+            </div>
+          )}
 
           <div>
             {step === 1 && <StepOne setStep={setStep} setNewUser={setNewUser} />}
@@ -46,9 +49,8 @@ export default function Signup() {
   );
 }
 
-
 const formatPhoneNumberForAWS = (phoneNumber) => {
-  let cleaned = phoneNumber.replace(/\D/g, '');  
+  let cleaned = phoneNumber.replace(/\D/g, '');
   return `+${cleaned.length > 11 ? cleaned : '55' + cleaned}`;
 };
 
@@ -174,7 +176,6 @@ function StepOne({ setStep, setNewUser }) {
   return (
     <div className="font-montserrat flex flex-col justify-center items-center md:w-[480px] md:px-4">
       <div>
-        <h2 className="text-5xl font-bold text-center font-montserrat">Etapa 1</h2>
         <h3 className="mt-2 text-sm text-gray-700">
           Insira seus dados abaixo para criar uma nova conta
         </h3>

@@ -1,10 +1,10 @@
-import { Amplify } from 'aws-amplify';
-import '../styles/globals.css';
-import config from '../aws-exports';
-import { Authenticator } from '@aws-amplify/ui-react';
 import { Notify } from '@/components/common/notification';
-import Modal from '@/components/common/modal';
+import { Authenticator } from '@aws-amplify/ui-react';
 import { Alert } from '@/components/common/alert';
+import Modal from '@/components/common/modal';
+import { Amplify } from 'aws-amplify';
+import config from '../aws-exports';
+import '../styles/globals.css';
 
 if (process.env.NODE_ENV === 'development') {
   Amplify.configure({
