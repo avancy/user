@@ -9,6 +9,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 export default function Signup() {
   const [newUser, setNewUser] = useState({ username: '', password: '' });
