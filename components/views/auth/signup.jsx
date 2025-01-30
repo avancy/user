@@ -2,14 +2,15 @@ import { FormBuilder, InputType, InputWidth, LabelStyle } from '@/components/com
 import EmailConfirmationBanner from '@/public/svgs/banners/email_confirmation.svg';
 import { Notify } from '@/components/common/notification';
 import { AUTH_ERROR_MESSAGES } from '@/constrants/auth';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Fragment, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import { Auth } from 'aws-amplify';
 import Image from 'next/image';
 import Link from 'next/link';
 import * as yup from 'yup';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import axios from 'axios';
 
 export default function Signup() {
   const [newUser, setNewUser] = useState({ username: '', password: '' });
@@ -74,7 +75,7 @@ function StepOne({ setStep, setNewUser }) {
           phone_number: formatPhoneNumberForAWS(data.phone_number),
           'custom:first_name': data.first_name,
           'custom:last_name': data.last_name,
-          'custom:company_id': '57e635df-94d1-4f2f-9237-5eb9ebbbdae6' 
+          'custom:company_id': '57e635df-94d1-4f2f-9237-5eb9ebbbdae6',
         },
         autoSignIn: {
           enabled: true,
@@ -234,7 +235,7 @@ function StepTwo({ setStep, newUser }) {
       if (error && 'name' in error && error.name === 'CodeMismatchException') {
         setWrongCode(true);
         Notify.error('Código inválido.');
-        return
+        return;
       }
       Notify.error('erro ao validar Email');
     } finally {
@@ -314,27 +315,22 @@ function StepThree() {
     setFileName(file.name);
   };
 
-  const onSubmit = (data) => {
-    const formData = new FormData();
-    formData.append('current_role', data.current_role);
-    formData.append('about_you', data.about_you || '');
-    formData.append('resume', resumeFile);
+  const onSubmit = async (data) => {
+    const formDataPdf = new FormData();
+    formDataPdf.append('resume.pdf', resumeFile);
 
-    fetch('/api/upload-resume', {
-      method: 'POST',
-      body: formData,
-    })
-      .then((response) => {
-        if (response) {
-          Notify.success('Currículo enviado com sucesso!');
-          router.push('/');
-        } else {
-          Notify.error('Erro ao enviar o currículo.');
-        }
-      })
-      .catch(() => {
-        Notify.error('Erro ao enviar o currículo.');
-      });
+    await axios.post('/api/applicant/profile-about', {
+      position_title: data.current_role,
+      about: data.about_you,
+    });
+
+    await axios.post('/api/applicant/profile-resume', formDataPdf, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    router.push('/');
   };
 
   return (
