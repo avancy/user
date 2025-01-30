@@ -8,6 +8,7 @@ import { Auth } from 'aws-amplify';
 import Image from 'next/image';
 import Link from 'next/link';
 import * as yup from 'yup';
+import { useForm } from 'react-hook-form';
 
 export default function Signup() {
   const [newUser, setNewUser] = useState({ username: '', password: '' });
@@ -72,6 +73,7 @@ function StepOne({ setStep, setNewUser }) {
           phone_number: formatPhoneNumberForAWS(data.phone_number),
           'custom:first_name': data.first_name,
           'custom:last_name': data.last_name,
+          'custom:company_id': '57e635df-94d1-4f2f-9237-5eb9ebbbdae6' 
         },
         autoSignIn: {
           enabled: true,
@@ -227,10 +229,13 @@ function StepTwo({ setStep, newUser }) {
 
       setStep(3);
     } catch (error) {
+      console.error(error);
       if (error && 'name' in error && error.name === 'CodeMismatchException') {
         setWrongCode(true);
+        Notify.error('Código inválido.');
+        return
       }
-      console.error(error);
+      Notify.error('erro ao validar Email');
     } finally {
       setIsLoading(false);
     }
