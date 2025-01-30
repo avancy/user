@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { LightTooltip } from '../tooltip';
+import { LightTooltip } from './tooltip';
 import { useEffect } from 'react';
 import * as masks from '../masks';
 import * as yup from 'yup';

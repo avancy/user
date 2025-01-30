@@ -1,4 +1,4 @@
-import EvaluationCard from '../views/evaluations/card';
+import EvaluationCard from './card';
 
 export function GridEvaluations({ evaluations }) {
   const keys = Object.keys(evaluations || {});

@@ -14,7 +14,7 @@ import {
   XMarkIcon,
 } from '@heroicons/react/24/outline';
 
-export function CandidateHeader({ user, signOut, openProfessionalProfile }) {
+export function CandidateHeader({ applicant, signOut, openProfessionalProfile }) {
   const router = useRouter();
 
   const isRouteActive = (href, currentPath) => {
@@ -139,9 +139,9 @@ export function CandidateHeader({ user, signOut, openProfessionalProfile }) {
                       <div className="pt-4 pb-2">
                         <div className="flex items-center px-5">
                           <div className="flex-shrink-0">
-                            {user?.f_photo?.url ? (
+                            {applicant?.f_photo?.url ? (
                               <img
-                                src={user?.f_photo?.url}
+                                src={applicant?.f_photo?.url}
                                 alt="Avatar"
                                 className="w-10 h-10 text-sm text-gray-500 rounded-full"
                               />
@@ -150,8 +150,8 @@ export function CandidateHeader({ user, signOut, openProfessionalProfile }) {
                             )}
                           </div>
                           <div className="ml-3">
-                            <div className="text-base font-medium text-gray-800">{user?.name}</div>
-                            <div className="text-sm font-medium text-gray-500">{user?.email}</div>
+                            <div className="text-base font-medium text-gray-800">{applicant?.name}</div>
+                            <div className="text-sm font-medium text-gray-500">{applicant?.email}</div>
                           </div>
                         </div>
                         <div className="px-2 mt-3 space-y-1">
@@ -242,9 +242,9 @@ export function CandidateHeader({ user, signOut, openProfessionalProfile }) {
                 <div>
                   <Menu.Button className="flex text-sm bg-white rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                     <span className="sr-only">Open user menu</span>
-                    {user?.f_photo?.url ? (
+                    {applicant?.f_photo?.url ? (
                       <img
-                        src={user?.f_photo?.url}
+                        src={applicant?.f_photo?.url}
                         alt="Avatar"
                         className="w-10 h-10 text-sm text-gray-500 rounded-full "
                       />

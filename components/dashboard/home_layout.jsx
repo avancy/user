@@ -1,6 +1,6 @@
 import { ProfessionalProfile } from '../main-page/professional/profile';
 import { ExclamationTriangleIcon } from '@heroicons/react/20/solid';
-import { CandidateHeader } from './candidate_header';
+import { CandidateHeader } from './header';
 import { Footer } from '../main-page/footer';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
@@ -8,7 +8,7 @@ import { Auth } from 'aws-amplify';
 import { api } from '@/lib/api';
 import Head from 'next/head';
 
-export default function CandidateHomeLayout({ children, photoPath, applicant, ...rest }) {
+export default function CandidateHomeLayout({ children, applicant, ...rest }) {
   const [showFillResumeWarn, setShowFillResumeWarn] = useState(false);
   const [userUpdatedProfile, setUserUpdatedProfile] = useState(false);
   const [openProfile, setOpenProfile] = useState(false);
@@ -53,10 +53,9 @@ export default function CandidateHomeLayout({ children, photoPath, applicant, ..
       </Head>
       <div className="flex flex-col min-h-screen">
         <CandidateHeader
-          user={applicant}
+          applicant={applicant}
           signOut={signOut}
           openProfessionalProfile={setOpenProfile}
-          photoPath={photoPath}
         />
         <ProfessionalProfile
           open={openProfile}

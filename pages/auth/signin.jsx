@@ -1,4 +1,4 @@
-import { fetchApplicant } from '@/lib/services/server_side_props';
+import { fetchApplicant } from '@/lib/interactions/backend/server_side_props';
 import { AuthLayout } from '@/components/auth/layout';
 import Login from '@/components/views/auth/signin';
 import Head from 'next/head';

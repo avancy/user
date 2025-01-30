@@ -1,8 +1,8 @@
+import EvaluationManager from '@/lib/interactions/backend/evaluations';
 import { EVALUATION_STAGE_IMAGES } from '@/constrants/evaluation';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import axios from 'axios';
-import EvaluationManager from '@/classes/evaluations';
 
 export default function EvaluationExecute({ evaluation: initialEvaluation, job, stage_id }) {
   const [currentScreen, setCurrentScreen] = useState('description');
@@ -92,7 +92,7 @@ export default function EvaluationExecute({ evaluation: initialEvaluation, job, 
 
       return () => clearInterval(timer);
     }
-  }, [currentScreen, evaluation.start, evaluation.questions.length, evaluation.time_per_question]);
+  }, []);
 
   return (
     <div className="min-h-screen md:p-6 bg-gradient-to-br from-gray-100 to-gray-200">

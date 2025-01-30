@@ -1,8 +1,8 @@
-import TempExecuteDisc from '@/components/views/evaluations/temp_execute_disc';
-import { fetchApplicant } from '@/lib/services/server_side_props';
+import { fetchApplicant } from '@/lib/interactions/backend/server_side_props';
+import EvaluationExecute from '@/components/views/evaluations/execute';
 
 export default function Main({ applicant }) {
-  return <TempExecuteDisc applicant={applicant} />;
+  return <EvaluationExecute applicant={applicant} />;
 }
 
 export async function getServerSideProps({ req }) {

@@ -1,5 +1,5 @@
 import GridEvaluations from '../../evaluation/grid';
-import JobManager from '@/classes/job';
+import JobManager from '@/lib/interactions/backend/job';
 
 export default function Evaluations({ evaluations }) {
   const sortEvaluations = async (evaluations) => {

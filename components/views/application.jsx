@@ -9,7 +9,7 @@ import {
   checkInviteStatusAndFetchJobInfo,
   sortJobs,
 } from '../../lib/functions/proposal';
-import JobManager from '@/classes/job';
+import JobManager from '@/lib/interactions/backend/job';
 import Modal from '../common/modal';
 
 export default function ApplicationsView({ applicant }) {
@@ -51,7 +51,9 @@ export default function ApplicationsView({ applicant }) {
     <ProposalProvider>
       <div className="px-6 xl:mx-32 xl:px-0 font-montserrat">
         <div className="flex flex-col items-center w-full gap-9">
-          <h1 className='w-full text-4xl font-bold text-transparent bg-gradient-to-r from-brand-gradient-primary to-brand-gradient-secondary bg-clip-text'>SEJA BEM-VINDO(A)!</h1>
+          <h1 className="w-full text-4xl font-bold text-transparent bg-gradient-to-r from-brand-gradient-primary to-brand-gradient-secondary bg-clip-text">
+            SEJA BEM-VINDO(A)!
+          </h1>
 
           <div className="w-full h-auto">
             <h2 className="text-lg font-medium tracking-wide uppercase">Candidaturas Ativas:</h2>

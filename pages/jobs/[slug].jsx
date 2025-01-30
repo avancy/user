@@ -1,6 +1,6 @@
 import { BriefcaseIcon, CalendarIcon, CheckIcon, MapPinIcon } from '@heroicons/react/20/solid';
 import { WhiteSpinner } from '@/components/common/loadding/white_spinner';
-import CandidateHome from '@/components/dashboard/candidate_home';
+import CandidateHome from '@/components/dashboard/home';
 import { BtnShare } from '@/components/common/buttons/share';
 import { ModalQuestion } from '@/components/models/question';
 import { Notify } from '@/components/common/notification';
@@ -10,12 +10,9 @@ import { api } from '@/lib/api';
 import moment from 'moment';
 import {
   fetchApplicant,
-  fetchCompanyCustomization,
-  fetchCompanyIdByHost,
-  getHost,
   getJobDetails,
   isAppliedToJob,
-} from '@/lib/services/server_side_props';
+} from '@/lib/interactions/backend/server_side_props';
 
 export default function Job({ job, is_applied, applicant, primary_color, secondary_color }) {
   return (

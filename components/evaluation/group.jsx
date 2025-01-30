@@ -1,5 +1,4 @@
 import { LinkIcon, ChevronDownIcon } from '@heroicons/react/20/solid';
-import { Transition } from '@headlessui/react';
 import Evaluation from '.';
 import { classNames } from '@/util/css';
 

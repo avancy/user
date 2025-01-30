@@ -50,9 +50,6 @@ export function Evaluation({ evaluation, job_id }) {
         <h3 className="text-sm text-gray-600 truncate">{evaluation.stage.description}</h3>
       </div>
 
-      {/* Separator */}
-      {/* <hr className="my-4 border-gray-200" /> */}
-
       {/* Details */}
       <div className="space-y-2">
         <p className="text-sm text-gray-700">

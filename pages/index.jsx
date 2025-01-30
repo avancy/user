@@ -1,8 +1,9 @@
-import CandidateHomeLayout from '@/components/dashboard/candidate_home_layout';
-import { fetchApplicant } from '@/lib/services/server_side_props';
+import CandidateHomeLayout from '@/components/dashboard/home_layout';
+import { fetchApplicant } from '@/lib/interactions/backend/server_side_props';
 import ApplicationsView from '@/components/views/application';
 
 export default function Applications({ applicant }) {
+  console.log(applicant)
   return (
     <CandidateHomeLayout applicant={applicant}>
       <ApplicationsView applicant={applicant} />
@@ -14,11 +15,9 @@ export async function getServerSideProps({ req }) {
   const applicant = await fetchApplicant(req);
 
   if (applicant == null) {
-    const redirect = `/auth/signin?redirect=${encodeURIComponent(`${req.url}`)}`;
-
     return {
       redirect: {
-        destination: redirect,
+        destination: `/auth/signin?redirect=${encodeURIComponent(`${req.url}`)}`,
         permanent: false,
       },
     };

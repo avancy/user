@@ -1,12 +1,17 @@
-import CandidateHomeLayout from '@/components/dashboard/candidate_home_layout';
-import { fetchApplicant } from '@/lib/services/server_side_props';
-import { EVALUATION_MOCKS } from '@/constrants/evaluation';
+import CandidateHomeLayout from '@/components/dashboard/home_layout';
+import { fetchApplicant } from '@/lib/interactions/backend/server_side_props';
 import Evaluations from '@/components/views/evaluations';
+import { useEffect, useState } from 'react';
+import EvaluationManager from '@/lib/interactions/backend/evaluations';
 
 export default function Main({ applicant }) {
+  const [evaluations, setEvaluations] = useState([]);
+
+    useEffect(() => EvaluationManager.applicant.getAll({ onSuccess: setEvaluations }), []);
+
   return (
     <CandidateHomeLayout applicant={applicant}>
-      <Evaluations evaluations={EVALUATION_MOCKS} />
+      <Evaluations evaluations={evaluations} />
     </CandidateHomeLayout>
   );
 }

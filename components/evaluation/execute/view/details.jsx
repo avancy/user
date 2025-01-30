@@ -1,5 +1,5 @@
 import { INTERNSHIPS_TYPES, TESTS } from '../constants';
-import { CandidateHeader } from '@/components/dashboard/candidate_header';
+import { CandidateHeader } from '@/components/dashboard/header';
 
 export default function Details({ type, applicant, ...rest }) {
   const Component = TESTS[type][INTERNSHIPS_TYPES.DETAILS];

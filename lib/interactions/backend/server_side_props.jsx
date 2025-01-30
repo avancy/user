@@ -21,15 +21,15 @@ async function fetchApplicant(req) {
   }
 }
 
-export async function getApplicantId(req) {
-  const { Auth } = withSSRContext({ req });
+  export async function getApplicantId(req) {
+    const { Auth } = withSSRContext({ req });
 
-  await Auth.currentSession();
+    await Auth.currentSession();
 
-  return await Auth.currentAuthenticatedUser()
-    .then((u) => u?.username)
-    .catch((err) => null);
-}
+    return await Auth.currentAuthenticatedUser()
+      .then((u) => u?.username)
+      .catch((err) => null);
+  }
 
 async function fetchCompanyCustomization(companyId) {
   return api_public
@@ -154,17 +154,6 @@ async function isAppliedToJob(job_id, applicant_id) {
     });
 }
 
-function getHost(req) {
-  if (process.env.NODE_ENV === 'development') {
-    return 'agrovagas.mavielorh.com.br';
-  }
-  if (req) {
-    return (req.headers['x-forwarded-host'] || req.headers['host'] || '').toLowerCase();
-  }
-
-  return '';
-}
-
 export {
   fetchCompanyIdByHost,
   fetchApplicant,
@@ -172,7 +161,6 @@ export {
   getJobDetails,
   getCompanyJobs,
   getOpeningJobs,
-  getHost,
   isSubscribedToCompany,
   isAppliedToJob,
   fetchChildCompaniesLogo,

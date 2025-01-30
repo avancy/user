@@ -1,4 +1,4 @@
-import { fetchCompanyIdByHost, getHost } from '@/lib/services/server_side_props';
+import { fetchCompanyIdByHost, getHost } from '@/lib/interactions/backend/server_side_props';
 
 export default async function handler(req, res) {
   if (req) {

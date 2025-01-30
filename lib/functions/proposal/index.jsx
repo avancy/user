@@ -2,7 +2,7 @@ import { Notify } from '@/components/common/notification';
 import ModalProposal from '@/components/models/proposal';
 import { decodeJwt } from '@/util/jwt_decoder';
 import Modal from '@/components/common/modal';
-import JobManager from '@/classes/job';
+import JobManager from '@/lib/interactions/backend/job';
 import { api } from '@/lib/api';
 
 const { Auth } = require('aws-amplify');

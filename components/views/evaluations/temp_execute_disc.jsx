@@ -23,6 +23,8 @@ export default function TempExecuteDisc({ applicant }) {
     Notify.success('Dados salvos com sucesso!');
   };
 
+  const handleRedo = () => setDisc(null);
+
   const fetchDisc = async () => {
     setIsLoading(true);
     try {
@@ -65,7 +67,7 @@ export default function TempExecuteDisc({ applicant }) {
   }
 
   if (disc !== null) {
-    return <DiscFinish applicant={applicant} disc={disc} />;
+    return <DiscFinish applicant={applicant} disc={disc} onRedo={handleRedo} />;
   }
 
   return (

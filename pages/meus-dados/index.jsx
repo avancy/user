@@ -1,5 +1,5 @@
 import { FormBuilder, InputType, InputWidth } from '@/components/common/form_builder';
-import CandidateHomeLayout from '@/components/dashboard/candidate_home_layout';
+import CandidateHomeLayout from '@/components/dashboard/home_layout';
 import { Notify } from '@/components/common/notification';
 import { formatPhoneNumber } from '@/components/masks';
 import { useEffect, useRef, useState } from 'react';
@@ -12,7 +12,7 @@ import {
   fetchCompanyCustomization,
   fetchCompanyIdByHost,
   getHost,
-} from '@/lib/services/server_side_props';
+} from '@/lib/interactions/backend/server_side_props';
 
 function FormUser({ user, photoPath }) {
   const inputRef = useRef(null);
@@ -286,21 +286,17 @@ export default function ConfingNewAccount({ applicant }) {
   );
 }
 
-export async function getServerSideProps(context) {
-  const { req, query, res, asPath, pathname } = context;
-  if (req) {
-    let host = getHost(req);
-    let company_page_url;
+export async function getServerSideProps({ req }) {
+  const applicant = await fetchApplicant(req);
 
-    const { partner_id, type } = await fetchCompanyIdByHost(host);
-    if (partner_id) {
-      const { base_domain, domain_prefix } = await fetchCompanyCustomization(partner_id);
-      company_page_url = `https://${domain_prefix}.${base_domain}`;
-    }
-
-    let applicant = await fetchApplicant(req);
-
-    return { props: { applicant: applicant?.f_photo?.url, company_page_url, type } };
+  if (applicant == null) {
+    return {
+      redirect: {
+        destination: `/auth/signin?redirect=${encodeURIComponent(`${req.url}`)}`,
+        permanent: false,
+      },
+    };
   }
-  return { notFound: true };
+
+  return { props: { applicant } };
 }
