@@ -1,69 +1,25 @@
-import EmailConfirmationBanner from '@/public/svgs/banners/email_confirmation.svg';
-import { Notify } from '@/components/common/notification';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
-import { Auth } from 'aws-amplify';
-import Image from 'next/image';
+import Dropzone from 'react-dropzone';
+import { useState } from 'react';
 import * as yup from 'yup';
 import axios from 'axios';
+import FileIcon from '@/images/icons/FileIcon';
 
-export default function Signup() {
-  const [newUser, setNewUser] = useState({ username: '', password: '' });
-  const [step, setStep] = useState(1);
+const SchemaStepTheree = yup.object({
+  position_title: yup.string().required('Esse campo não pode ficar em branco'),
+  resume: yup
+    .mixed()
+    .required('O currículo é obrigatório')
+    .test(
+      'fileType',
+      'Somente arquivos PDF são permitidos',
+      (value) => value && value.type === 'application/pdf',
+    ),
+});
 
-  return (
-    <div className="flex flex-col items-center justify-center flex-1">
-      <div className={`w-full ${step === 1 && 'lg:w-2/3'} flex items-center justify-center`}>
-        <div className={`flex flex-col h-full py-3 gap-4 md:gap-6`}>
-          {step === 1 ? (
-            <div className="mt-4 text-4xl font-bold text-center font-montserrat">Cadastre-se</div>
-          ) : (
-            <div className="flex items-center justify-center text-3xl font-montserrat">
-              {[1, 2, 3].map((num, index) => (
-                <Fragment key={num}>
-                  <button
-                    onClick={() => num === 1 && setStep(1)}
-                    disabled={num !== 1}
-                    className={`rounded-full w-11 h-11 ${
-                      step >= num ? 'bg-[#24EEA0] font-bold text-black' : 'text-gray-500'
-                    } flex border-2 border-gray-500 justify-center items-center`}
-                  >
-                    {num}
-                  </button>
-                  {index < 2 && <div className="w-[60px] h-[2px] bg-gray-500"></div>}
-                </Fragment>
-              ))}
-            </div>
-          )}
-
-          <div>
-            {step === 1 && <StepOne setStep={setStep} setNewUser={setNewUser} />}
-            {step === 2 && <StepTwo setStep={setStep} newUser={newUser} />}
-            {step === 3 && <StepThree setStep={setStep} />}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-const formatPhoneNumberForAWS = (phoneNumber) => {
-  let cleaned = phoneNumber.replace(/\D/g, '');
-  return `+${cleaned.length > 11 ? cleaned : '55' + cleaned}`;
-};
-
-function StepOne({ setStep, setNewUser }) {}
-
-function StepTwo({ setStep, newUser }) {
- 
-}
-
-
-
-function StepThree() {
-  const [resumeFile, setResumeFile] = useState(null);
+export default function SignupInfoView() {
   const [fileName, setFileName] = useState('');
   const router = useRouter();
   const {
@@ -78,25 +34,27 @@ function StepThree() {
 
   const onDrop = (acceptedFiles) => {
     const file = acceptedFiles[0];
-    setResumeFile(file);
     setValue('resume', file);
     setFileName(file.name);
   };
 
-  const onSubmit = async (data) => {
+  const onSubmit = async ({ resume, position_title, about }) => {
     const formDataPdf = new FormData();
-    formDataPdf.append('resume.pdf', resumeFile);
+    formDataPdf.append(fileName, resume);
+    console.log(resume);
+    console.log(position_title);
+    console.log(about);
 
-    await axios.post('/api/applicant/profile-about', {
-      position_title: data.current_role,
-      about: data.about_you,
-    });
+    // await axios.post('/api/applicant/profile-about', {
+    //   position_title,
+    //   about,
+    // });
 
-    await axios.post('/api/applicant/profile-resume', formDataPdf, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+    // await axios.post('/api/applicant/profile-resume', formDataPdf, {
+    //   headers: {
+    //     'Content-Type': 'multipart/form-data',
+    //   },
+    // });
 
     router.push('/');
   };
@@ -117,25 +75,25 @@ function StepThree() {
         onSubmit={handleSubmit(onSubmit)}
       >
         <div>
-          <label className="text-base font-semibold" htmlFor="current_role">
+          <label className="text-base font-semibold" htmlFor="position_title">
             Posição Atual: <span className="text-red-600">*</span>
           </label>
           <input
-            {...register('current_role')}
-            onChange={(e) => setValue('current_role', e.target.value)}
+            {...register('position_title')}
+            onChange={(e) => setValue('position_title', e.target.value)}
             placeholder="Ex: Engenheiro Agrícola"
             className="block w-full mt-1 text-base border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-gray-400"
           />
-          <p className="text-xs text-red-600">{errors.current_role?.message}</p>
+          <p className="text-xs text-red-600">{errors.position_title?.message}</p>
         </div>
 
         <div>
-          <label className="text-base font-semibold" htmlFor="about_you">
+          <label className="text-base font-semibold" htmlFor="about">
             Sobre Você:
           </label>
           <textarea
-            {...register('about_you')}
-            onChange={(e) => setValue('about_you', e.target.value)}
+            {...register('about')}
+            onChange={(e) => setValue('about', e.target.value)}
             placeholder="Digite aqui informações úteis que podem ajudar na sua contratação."
             className="block w-full mt-1 text-base border-gray-300 rounded-md shadow-sm resize-none focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-gray-400"
             rows={5}
@@ -156,7 +114,7 @@ function StepThree() {
                 }`}
               >
                 <div className="flex flex-col items-center justify-center w-full gap-2">
-                  <Image src={FileIcon} alt="Ícone de Upload de Arquivo" />
+                  <FileIcon />
 
                   {fileName ? (
                     <p className="max-w-full text-sm text-green-600 truncate">

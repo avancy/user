@@ -3,6 +3,7 @@ import { fetchApplicant } from '@/lib/services/server_side_props';
 import ApplicationsView from '@/components/views/application';
 
 export default function Applications({ applicant }) {
+  console.log(applicant)
   return (
     <CandidateHomeLayout applicant={applicant}>
       <ApplicationsView applicant={applicant} />

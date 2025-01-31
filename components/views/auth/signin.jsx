@@ -1,4 +1,5 @@
 import { FormBuilder, InputType, InputWidth, LabelStyle } from '../../common/form_builder';
+import { useDataTransferContext } from '@/contexts/data_transfer';
 import { FormAlertError } from '@/components/form_alert_error';
 import { BtnBase } from '@/components/common/buttons/base';
 import { LinkedInIcon } from '@/images/icons/LinkedinIcon';
@@ -9,6 +10,8 @@ import { Auth } from 'aws-amplify';
 import { useState } from 'react';
 import Link from 'next/link';
 import * as yup from 'yup';
+import axios from 'axios';
+import { AUTH_ERROR_MESSAGES } from '@/constrants/auth';
 
 const formLogin = {
   email: {
@@ -35,54 +38,64 @@ const formLogin = {
 
 export default function Login() {
   const [changePasswordRequired, setChangePasswordRequired] = useState(false);
-  const [newPasswordConfirm, setNewPasswordConfirm] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [newPassword, setNewPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
+
+  const { transferData } = useDataTransferContext();
+
   const { redirect } = router.query;
+  const redirectUrl = redirect ? `?redirect=${encodeURIComponent(redirect)}` : '';
 
   const handleSubmit = async ({ email, password }) => {
     setIsLoading(true);
     try {
       const user = await Auth.signIn(email, password);
-      if (changePasswordRequired) {
-        if (newPassword === newPasswordConfirm) {
-          let res = await Auth.completeNewPassword(user, newPassword);
-          setChangePasswordRequired(false);
-        }
-      } else {
-        if (user.challengeName === 'NEW_PASSWORD_REQUIRED') {
-          setChangePasswordRequired(true);
-        } else if (user.challengeName === undefined) {
-          const redirectUrl = redirect ? decodeURIComponent(redirect) : '/';
-          Notify.success('Login efetuado com sucesso.');
-          router.push(redirectUrl);
-        }
+      if (!changePasswordRequired && user.challengeName === 'NEW_PASSWORD_REQUIRED') {
+        setChangePasswordRequired(true);
       }
+
+      const [profileAboutResponse, profileResumeResponse] = await Promise.all([
+        axios.get('/api/applicant/profile-about'),
+        axios.get('/api/applicant/profile-resume'),
+      ]);
+
+      const { position_title: positionTitle, about } = profileAboutResponse.data || {};
+      const resumeData = profileResumeResponse.data;
+
+      if (!positionTitle || !about || !resumeData || !resumeData.url) {
+        Notify.warning('O seu perfil não está completo. Redirecionando...');
+        transferData({
+          redirect: `/auth/signup/info${redirectUrl}`,
+          data: { email, password },
+        });
+        return;
+      }
+
+      Notify.success('Login efetuado com sucesso.');
     } catch (error) {
       console.error(error);
-      if (error && 'name' in error && error.name === 'NotAuthorizedException') {
-        setErrorMessage('Email e/ou senha incorretos.');
-        setTimeout(() => setErrorMessage(''), 5000);
-      } else if (error && 'name' in error && error.name === 'UserNotConfirmedException') {
-        router.push(`/auth/confirm?email=${email}`);
-      } else if (error && 'name' in error && error.name === 'UserLambdaValidationException') {
-        Notify.warning('É necessário confirmar o e-mail. Redirecionando...');
-        setTimeout(() => {
-          router.push(`/auth/confirm?email=${email}`);
-        }, '1500');
-      } else {
-        setErrorMessage('Usuário não autorizado.');
-        setTimeout(() => setErrorMessage(''), 5000);
+      const errorName = error.name;
+      if (['UserNotConfirmedException', 'UserNotFoundException'].includes(errorName)) {
+        Notify.warning('O Email ainda não foi confirmado. Redirecionando...');
+        transferData({
+          redirect: `/auth/signup/validate_code${redirectUrl}`,
+          data: {
+            email,
+            password,
+          },
+        });
+        return;
       }
+      const errorMessage = AUTH_ERROR_MESSAGES[errorName];
+      setErrorMessage(errorMessage);
+      setTimeout(() => setErrorMessage(''), 5000);
     }
     setIsLoading(false);
   };
 
-  const handleForgot = () =>
-    router.push(`/auth/forgot${redirect ? `?redirect=${encodeURIComponent(redirect)}` : ''}`);
+  const handleForgot = () => router.push(`/auth/forgot${redirectUrl}`);
 
   return (
     <>

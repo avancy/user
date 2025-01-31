@@ -1,5 +1,5 @@
 import { fetchApplicant } from '@/lib/services/server_side_props';
-import { AuthLayout } from '@/components/auth/layout';
+import { AuthLayout } from '@/components/layouts/auth';
 import Forgot from '@/components/views/auth/forgot';
 import Head from 'next/head';
 

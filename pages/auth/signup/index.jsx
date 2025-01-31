@@ -1,22 +1,18 @@
-import { fetchApplicant } from '@/lib/services/server_side_props';
 import { AuthLayout } from '@/components/layouts/auth';
-import Login from '@/components/views/auth/signin';
-import Head from 'next/head';
+import SignupLayout from '@/components/layouts/signup';
+import SignupIndexView from '@/components/views/auth/signup/index';
 
 export default function Main() {
-  return (
-    <>
-      <Head>
-        <title>Login - Mavielo RH</title>
-      </Head>
-      <Login />
-    </>
-  );
+  return <SignupIndexView />;
 }
 
-Main.getLayout = (page) => <AuthLayout>{page}</AuthLayout>;
+Main.getLayout = (page) => (
+  <AuthLayout>
+    <SignupLayout>{page}</SignupLayout>
+  </AuthLayout>
+);
 
-export async function getServerSideProps({ req, query }) {
+export async function getServerSideProps({ req }) {
   const { redirect } = query;
   const redirectUrl = redirect ? encodeURIComponent(`?redirect=${redirect}`) : '';
   const applicant = await fetchApplicant(req);
