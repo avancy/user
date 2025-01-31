@@ -269,7 +269,3 @@ export async function getServerSideProps({ req, params }) {
     },
   };
 }
-
-export async function getServerSideProps(context) {
-  const { req, params } = context;
-}
