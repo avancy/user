@@ -1,4 +1,4 @@
-import { fetchApplicant } from '@/lib/services/server_side_props';
+import { fetchApplicant, getUser } from '@/lib/services/server_side_props';
 import { AuthLayout } from '@/components/layouts/auth';
 import Login from '@/components/views/auth/signin';
 import Head from 'next/head';
@@ -22,7 +22,7 @@ export async function getServerSideProps({ req, query }) {
   const applicant = await fetchApplicant(req);
 
   if (applicant?.error) {
-    if (applicant.error === "UserNotConfirmedException") {
+    if (applicant.error === 'EmailNotVerifiedException') {
       return {
         redirect: {
           destination: `/auth/signup/validate_code${redirectUrl}`,
@@ -30,7 +30,7 @@ export async function getServerSideProps({ req, query }) {
         },
       };
     }
-    
+
     return { props: {} };
   }
 

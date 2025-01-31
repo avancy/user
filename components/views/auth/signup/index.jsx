@@ -1,21 +1,29 @@
 import { FormBuilder, InputType, InputWidth, LabelStyle } from '@/components/common/form_builder';
+import { useDataTransferContext } from '@/contexts/data_transfer';
 import { Notify } from '@/components/common/notification';
 import { AUTH_ERROR_MESSAGES } from '@/constrants/auth';
+import { useRouter } from 'next/router';
+import { Auth } from 'aws-amplify';
 import { useState } from 'react';
 import Link from 'next/link';
 import * as yup from 'yup';
-import { useDataTransferContext } from '@/contexts/data_transfer';
 
 export default function SignupIndexView() {
-  const { transferData } = useDataTransferContext()
   const [agreed, setAgreed] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const { transferData } = useDataTransferContext();
 
-  const onSubmit = async (data) => {
+  const router = useRouter();
+  const { redirect } = router.query;
+  const redirectUrl = redirect ? `?redirect=${encodeURIComponent(redirect)}` : '';
+
+  const onSubmit = async ({ email, password, phone_number, fist_name, last_name }) => {
     if (!agreed) {
       Notify.error('Você precisa aceitar os Termos e a Política de Privacidade.');
       return;
     }
 
+    setIsLoading(true);
     try {
       // await Auth.signUp({
       //   username: data.email,
@@ -32,16 +40,19 @@ export default function SignupIndexView() {
       //   },
       // });
 
-      Notify.success(
-        'Usuário cadastrado com sucesso. Verifique seu e-mail para confirmar o cadastro.',
-      );
+      // await Auth.resendSignUp(email);
+
+      Notify.success('Usuário cadastrado com sucesso. Iniciando processo de validação do e-mail.');
+
       transferData({
-        redirect: '/auth/signup/validate_code',
-        data
+        redirect: `/auth/signup/validate_code${redirectUrl}`,
+        data,
       });
     } catch (error) {
       console.error(error);
       Notify.error(AUTH_ERROR_MESSAGES[error.name]);
+    } finally {
+      setIsLoading(false);
     }
   };
 

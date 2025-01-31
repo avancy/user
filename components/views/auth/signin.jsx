@@ -42,11 +42,11 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
+  const { redirect } = router.query;
+  const redirectUrl = redirect ? `?redirect=${encodeURIComponent(redirect)}` : '';
 
   const { transferData } = useDataTransferContext();
 
-  const { redirect } = router.query;
-  const redirectUrl = redirect ? `?redirect=${encodeURIComponent(redirect)}` : '';
 
   const handleSubmit = async ({ email, password }) => {
     setIsLoading(true);
@@ -54,6 +54,18 @@ export default function Login() {
       const user = await Auth.signIn(email, password);
       if (!changePasswordRequired && user.challengeName === 'NEW_PASSWORD_REQUIRED') {
         setChangePasswordRequired(true);
+      }
+
+      if (!user?.signInUserSession?.idToken?.payload?.email_verified) {
+        Notify.warning('O Email ainda não foi confirmado. Redirecionando...');
+        transferData({
+          redirect: `/auth/signup/validate_code${redirectUrl}`,
+          data: {
+            email,
+            password,
+          },
+        });
+        return;
       }
 
       const [profileAboutResponse, profileResumeResponse] = await Promise.all([
@@ -72,6 +84,8 @@ export default function Login() {
         });
         return;
       }
+
+      router.push(redirect || '/');
 
       Notify.success('Login efetuado com sucesso.');
     } catch (error) {

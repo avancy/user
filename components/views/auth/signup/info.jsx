@@ -2,24 +2,18 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import Dropzone from 'react-dropzone';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import * as yup from 'yup';
 import axios from 'axios';
 import FileIcon from '@/images/icons/FileIcon';
 
 const SchemaStepTheree = yup.object({
+  about: yup.string().required('Esse campo não pode ficar em branco'),
   position_title: yup.string().required('Esse campo não pode ficar em branco'),
-  resume: yup
-    .mixed()
-    .required('O currículo é obrigatório')
-    .test(
-      'fileType',
-      'Somente arquivos PDF são permitidos',
-      (value) => value && value.type === 'application/pdf',
-    ),
+  resume: yup.mixed().required('O currículo é obrigatório'),
 });
 
-export default function SignupInfoView() {
+export default function SignupInfoView({ position_title, about, uploaded_resume }) {
   const [fileName, setFileName] = useState('');
   const router = useRouter();
   const {
@@ -30,6 +24,10 @@ export default function SignupInfoView() {
   } = useForm({
     mode: 'onChange',
     resolver: yupResolver(SchemaStepTheree),
+    defaultValues: {
+      position_title,
+      about,
+    },
   });
 
   const onDrop = (acceptedFiles) => {
@@ -40,24 +38,43 @@ export default function SignupInfoView() {
 
   const onSubmit = async ({ resume, position_title, about }) => {
     const formDataPdf = new FormData();
-    formDataPdf.append(fileName, resume);
+    formDataPdf.append('file', resume);
     console.log(resume);
-    console.log(position_title);
-    console.log(about);
 
-    // await axios.post('/api/applicant/profile-about', {
-    //   position_title,
-    //   about,
-    // });
+    await axios.post('/api/applicant/profile-about', {
+      position_title,
+      about,
+    });
 
-    // await axios.post('/api/applicant/profile-resume', formDataPdf, {
-    //   headers: {
-    //     'Content-Type': 'multipart/form-data',
-    //   },
-    // });
+    try {
+      await axios.post('/api/applicant/profile-resume', formDataPdf, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+    } catch (err) {
+      console.log(err);
+    }
 
     router.push('/');
   };
+
+  useEffect(() => {
+    if (uploaded_resume?.url) {
+      axios({
+        url: uploaded_resume.url,
+        method: 'GET',
+        responseType: 'blob',
+      }).then((response) => {
+        const file = new File([response.data], uploaded_resume.name, {
+          contentType: 'application/pdf',
+        });
+
+        setValue('resume', file);
+        setFileName(uploaded_resume.key);
+      });
+    }
+  }, [uploaded_resume]);
 
   return (
     <div className="max-w-[787px]">
@@ -84,7 +101,7 @@ export default function SignupInfoView() {
             placeholder="Ex: Engenheiro Agrícola"
             className="block w-full mt-1 text-base border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-gray-400"
           />
-          <p className="text-xs text-red-600">{errors.position_title?.message}</p>
+          <p className="h-5 text-xs text-red-600">{errors.position_title?.message}</p>
         </div>
 
         <div>
@@ -98,6 +115,7 @@ export default function SignupInfoView() {
             className="block w-full mt-1 text-base border-gray-300 rounded-md shadow-sm resize-none focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-gray-400"
             rows={5}
           />
+          <p className="h-5 text-xs text-red-600">{errors.about?.message}</p>
         </div>
 
         <div>
@@ -132,7 +150,7 @@ export default function SignupInfoView() {
             )}
           </Dropzone>
 
-          <p className="text-xs text-red-600">{errors.resume?.message}</p>
+          <p className="h-5 text-xs text-red-600">{errors.resume?.message}</p>
         </div>
 
         <button className="hover:scale-110 transition-all duration-500 mt-4 bg-[#24EEA0] h-12 rounded-full font-bold text-base mb-10">
