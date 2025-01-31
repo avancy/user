@@ -286,21 +286,43 @@ export default function ConfingNewAccount({ applicant }) {
   );
 }
 
-export async function getServerSideProps(context) {
-  const { req, query, res, asPath, pathname } = context;
-  if (req) {
-    let host = getHost(req);
-    let company_page_url;
-
-    const { partner_id, type } = await fetchCompanyIdByHost(host);
-    if (partner_id) {
-      const { base_domain, domain_prefix } = await fetchCompanyCustomization(partner_id);
-      company_page_url = `https://${domain_prefix}.${base_domain}`;
-    }
-
-    let applicant = await fetchApplicant(req);
-
-    return { props: { applicant: applicant?.f_photo?.url, company_page_url, type } };
+export async function getServerSideProps({ req }) {
+  const applicant = await fetchApplicant(req);
+  const redirectUrl = `?redirect=${encodeURIComponent(req.url)}`;
+  if (applicant == null) {
+    return {
+      redirect: {
+        destination: `/auth/signin${redirectUrl}`,
+        permanent: false,
+      },
+    };
   }
-  return { notFound: true };
+
+  if (applicant?.error) {
+    if (applicant.error === 'UserNotFoundException')
+      return {
+        redirect: {
+          destination: `/auth/signin${redirectUrl}`,
+          permanent: false,
+        },
+      };
+    return {
+      redirect: {
+        destination: `/auth/signup/confirm${redirectUrl}`,
+        permanent: false,
+      },
+    };
+  }
+
+  const { position_title, about, uploaded_resume } = applicant;
+  if (position_title === '' || about === '' || !uploaded_resume || !uploaded_resume.url) {
+    return {
+      redirect: {
+        destination: `/auth/signup/info${redirectUrl}`,
+        permanent: false,
+      },
+    };
+  }
+
+  return { props: { applicant } };
 }

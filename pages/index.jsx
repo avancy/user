@@ -3,7 +3,6 @@ import { fetchApplicant } from '@/lib/services/server_side_props';
 import ApplicationsView from '@/components/views/application';
 
 export default function Applications({ applicant }) {
-  console.log(applicant);
   return (
     <CandidateHomeLayout applicant={applicant}>
       <ApplicationsView applicant={applicant} />
@@ -32,7 +31,7 @@ export async function getServerSideProps({ req }) {
       };
     return {
       redirect: {
-        destination: `/auth/signup/validate_code${redirectUrl}`,
+        destination: `/auth/signup/confirm${redirectUrl}`,
         permanent: false,
       },
     };

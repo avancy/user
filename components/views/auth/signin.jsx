@@ -47,7 +47,6 @@ export default function Login() {
 
   const { transferData } = useDataTransferContext();
 
-
   const handleSubmit = async ({ email, password }) => {
     setIsLoading(true);
     try {
@@ -59,7 +58,7 @@ export default function Login() {
       if (!user?.signInUserSession?.idToken?.payload?.email_verified) {
         Notify.warning('O Email ainda não foi confirmado. Redirecionando...');
         transferData({
-          redirect: `/auth/signup/validate_code${redirectUrl}`,
+          redirect: `/auth/signup/confirm${redirectUrl}`,
           data: {
             email,
             password,
@@ -94,7 +93,7 @@ export default function Login() {
       if (['UserNotConfirmedException', 'UserNotFoundException'].includes(errorName)) {
         Notify.warning('O Email ainda não foi confirmado. Redirecionando...');
         transferData({
-          redirect: `/auth/signup/validate_code${redirectUrl}`,
+          redirect: `/auth/signup/confirm${redirectUrl}`,
           data: {
             email,
             password,

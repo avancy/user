@@ -28,7 +28,7 @@ export async function getServerSideProps({ req, query }) {
     if (applicant.error === 'EmailNotVerifiedException') {
       return {
         redirect: {
-          destination: `/auth/signup/validate_code${redirectUrl}`,
+          destination: `/auth/signup/confirm${redirectUrl}`,
           permanent: false,
         },
       };

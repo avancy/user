@@ -45,7 +45,7 @@ export default function SignupIndexView() {
       Notify.success('Usuário cadastrado com sucesso. Iniciando processo de validação do e-mail.');
 
       transferData({
-        redirect: `/auth/signup/validate_code${redirectUrl}`,
+        redirect: `/auth/signup/confirm${redirectUrl}`,
         data,
       });
     } catch (error) {

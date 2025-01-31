@@ -18,16 +18,36 @@ Main.getLayout = (page) => <AuthLayout>{page}</AuthLayout>;
 
 export async function getServerSideProps({ req, query }) {
   const { redirect } = query;
+  const redirectUrl = redirect ? encodeURIComponent(`?redirect=${redirect}`) : '';
   const applicant = await fetchApplicant(req);
 
-  if (applicant) {
+  if (applicant?.error) {
+    if (applicant.error === 'EmailNotVerifiedException') {
+      return {
+        redirect: {
+          destination: `/auth/signup/confirm${redirectUrl}`,
+          permanent: false,
+        },
+      };
+    }
+
+    return { props: {} };
+  }
+
+  const { position_title, about, uploaded_resume } = applicant;
+  if (position_title === '' || about === '' || !uploaded_resume || !uploaded_resume.url) {
     return {
       redirect: {
-        destination: redirect ? decodeURIComponent(redirect) : '/',
+        destination: `/auth/signup/info${redirectUrl}`,
         permanent: false,
       },
     };
   }
 
-  return { props: {} };
+  return {
+    redirect: {
+      destination: redirect ? decodeURIComponent(redirect) : '/',
+      permanent: false,
+    },
+  };
 }

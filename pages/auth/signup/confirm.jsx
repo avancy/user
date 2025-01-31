@@ -1,4 +1,4 @@
-import SignupValidateCodeView from '@/components/views/auth/signup/validate_code';
+import SignupValidateCodeView from '@/components/views/auth/signup/confirm';
 import { fetchApplicant } from '@/lib/services/server_side_props';
 import { AuthLayout } from '@/components/layouts/auth';
 import SignupLayout from '@/components/layouts/signup';
