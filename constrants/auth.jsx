@@ -19,6 +19,7 @@ export const AUTH_ERROR_MESSAGES = {
   InvalidSecurityTokenException: 'Token de segurança inválido. Refaça o processo de autenticação.',
   MFAMethodNotFoundException: 'Método de autenticação multifator não encontrado.',
   InternalErrorException: 'Erro interno no servidor. Tente novamente mais tarde.',
+  UserLambdaValidationException: 'Senha ou e-mail inválidos.',
   null: 'Erro desconhecido. Tente novamente mais tarde.',
   undefined: 'Erro desconhecido. Tente novamente mais tarde.',
 };

@@ -39,7 +39,6 @@ const formLogin = {
 
 export default function Login() {
   const [changePasswordRequired, setChangePasswordRequired] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
@@ -102,9 +101,7 @@ export default function Login() {
         });
         return;
       }
-      const errorMessage = AUTH_ERROR_MESSAGES[errorName];
-      setErrorMessage(errorMessage);
-      setTimeout(() => setErrorMessage(''), 5000);
+      Notify.error(AUTH_ERROR_MESSAGES[errorName]);
     }
     setIsLoading(false);
   };
@@ -120,7 +117,6 @@ export default function Login() {
             <p className="mt-2 text-sm text-gray-700">Faça login para acessar nossa plataforma</p>
           </div>
         </div>
-
         {isLoading && <LoadSpinner />}
         <FormBuilder
           formWidth="w-full"
@@ -169,9 +165,6 @@ export default function Login() {
               Cadastre-se
             </Link>
           </p>
-        </div>
-        <div className="mt-8">
-          {errorMessage !== '' && <FormAlertError message={errorMessage} />}
         </div>
       </div>
     </>

@@ -10,37 +10,35 @@ import * as yup from 'yup';
 
 export default function SignupIndexView() {
   const [agreed, setAgreed] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const { transferData } = useDataTransferContext();
 
   const router = useRouter();
   const { redirect } = router.query;
   const redirectUrl = redirect ? `?redirect=${encodeURIComponent(redirect)}` : '';
 
-  const onSubmit = async ({ email, password, phone_number, fist_name, last_name }) => {
+  const onSubmit = async ({ email, password, phone_number, first_name, last_name }) => {
     if (!agreed) {
       Notify.error('Você precisa aceitar os Termos e a Política de Privacidade.');
       return;
     }
 
-    setIsLoading(true);
     try {
-      // await Auth.signUp({
-      //   username: data.email,
-      //   password: data.password,
-      //   attributes: {
-      //     email: data.email,
-      //     phone_number: formatPhoneNumberForAWS(data.phone_number),
-      //     'custom:first_name': data.first_name,
-      //     'custom:last_name': data.last_name,
-      //     'custom:company_id': '57e635df-94d1-4f2f-9237-5eb9ebbbdae6',
-      //   },
-      //   autoSignIn: {
-      //     enabled: true,
-      //   },
-      // });
+      await Auth.signUp({
+        username: email,
+        password: password,
+        attributes: {
+          email: email,
+          phone_number: formatPhoneNumberForAWS(phone_number),
+          'custom:first_name': first_name,
+          'custom:last_name': last_name,
+          'custom:company_id': '57e635df-94d1-4f2f-9237-5eb9ebbbdae6',
+        },
+        autoSignIn: {
+          enabled: true,
+        },
+      });
 
-      // await Auth.resendSignUp(email);
+      await Auth.resendSignUp(email);
 
       Notify.success('Usuário cadastrado com sucesso. Iniciando processo de validação do e-mail.');
 
@@ -51,8 +49,6 @@ export default function SignupIndexView() {
     } catch (error) {
       console.error(error);
       Notify.error(AUTH_ERROR_MESSAGES[error.name]);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -132,9 +128,7 @@ export default function SignupIndexView() {
       ),
       className: 'text-base font-helvetica',
       width: InputWidth.FULL,
-      onChange: (value) => {
-        setAgreed(!!value);
-      },
+      onChange: (value) => setAgreed(!!value),
     },
   };
 
