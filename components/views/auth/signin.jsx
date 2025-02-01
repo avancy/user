@@ -19,6 +19,7 @@ const formLogin = {
     placeholder: 'Digite seu email',
     labelStyle: LabelStyle.MEDIUM,
     width: InputWidth.FULL,
+    mask: 'lowercase',
     validation: yup
       .string()
       .email('Insira um formato de e-mail válido')
