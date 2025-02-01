@@ -1,6 +1,6 @@
 import { Menu, Popover, Transition } from '@headlessui/react';
 import { UserCircleIcon } from '@heroicons/react/20/solid';
-import MavieloLogo from '@/images/logos/mavielo.svg';
+import MavieloLogo from '@/public/images/logo.png';
 import { NAVIGATION } from './constrants';
 import { useRouter } from 'next/router';
 import { classNames } from '@/util/css';
@@ -32,7 +32,7 @@ export function CandidateHeader({ user, signOut, openProfessionalProfile }) {
             <div className="flex px-2 lg:px-0">
               <div className="flex items-center flex-shrink-0">
                 <Link href={redirectTo} target="_blank" rel="noopener noreferrer">
-                  <Image priority src={MavieloLogo} alt="Logo MavieloRH" />
+                  <Image priority src={MavieloLogo} alt="Logo MavieloRH" className="w-auto h-11" />
                 </Link>
               </div>
               <nav
@@ -112,11 +112,14 @@ export function CandidateHeader({ user, signOut, openProfessionalProfile }) {
                     <div className="bg-white divide-y divide-gray-200 rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
                       <div className="pt-3 pb-2">
                         <div className="flex items-center justify-between px-4">
-                          <div>
-                            <Link href={redirectTo}>
-                              <Image priority src={MavieloLogo} alt="Logo MavieloRH" />
-                            </Link>
-                          </div>
+                          <Link href={redirectTo} className="h-full mx-auto">
+                            <Image
+                              priority
+                              src={MavieloLogo}
+                              alt="Logo MavieloRH"
+                              className="w-auto mx-auto h-11"
+                            />
+                          </Link>
                           <div className="-mr-2">
                             <Popover.Button className="inline-flex items-center justify-center p-2 text-gray-400 bg-white rounded-md hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500">
                               <span className="sr-only">Close menu</span>

@@ -4,13 +4,13 @@ import ProposalForm from '../proposal/proposal_form';
 import JobCards from '../proposal/job_cards';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import JobManager from '@/classes/job';
+import Modal from '../common/modal';
 import {
   checkInviteExpiration,
   checkInviteStatusAndFetchJobInfo,
   sortJobs,
 } from '../../lib/functions/proposal';
-import JobManager from '@/classes/job';
-import Modal from '../common/modal';
 
 export default function ApplicationsView({ applicant }) {
   const [applications, setApplications] = useState([]);
