@@ -9,7 +9,7 @@ import DiscFinish from '@/components/disc_finish';
 export default function TempExecuteDisc({ applicant }) {
   const [disc, setDisc] = useState(null);
   const [hasDoneDiscBefore, setHasDoneDiscBefore] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const handleSave = async (data) => {
     const req = {
       name: 'disc',
