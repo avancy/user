@@ -46,7 +46,7 @@ export default function SignupIndexView() {
         },
       });
 
-      await Auth.resendSignUp(email);
+      // await Auth.resendSignUp(email);
 
       Notify.success('Usuário cadastrado com sucesso. Iniciando processo de validação do e-mail.');
 
