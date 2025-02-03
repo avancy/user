@@ -29,7 +29,7 @@ export const DataTransferProvider = ({ children }) => {
     };
     setRedirectedInfos(redirected_infos);
     setData(newData);
-    route.push(redirect);
+    route.push(redirect, {}, { shallow: true });
   };
 
   /**

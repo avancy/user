@@ -158,7 +158,7 @@ export default function Login() {
           <p>
             Já tem uma conta?{' '}
             <Link
-              href={'/auth/signup'}
+              href={`/auth/signup${redirectUrl}`}
               className="text-transparent bg-gradient-to-r from-brand-primary-100 to-brand-secondary-500 bg-clip-text"
             >
               {' '}

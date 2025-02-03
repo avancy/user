@@ -18,7 +18,7 @@ Main.getLayout = (page) => <AuthLayout>{page}</AuthLayout>;
 
 export async function getServerSideProps({ req, query }) {
   const { redirect } = query;
-  const redirectUrl = redirect ? encodeURIComponent(`?redirect=${redirect}`) : '';
+  const redirectUrl = redirect ? `?redirect=${encodeURIComponent(redirect)}` : '';
   const applicant = await fetchApplicant(req);
 
   if (applicant?.error) {

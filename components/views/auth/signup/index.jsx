@@ -8,6 +8,14 @@ import { useState } from 'react';
 import Link from 'next/link';
 import * as yup from 'yup';
 
+const formatPhoneNumberForAWS = (phoneNumber) => {
+  let cleanedNumber = phoneNumber.replace(/\D/g, '');
+  if (cleanedNumber.length >= 10) {
+    cleanedNumber = `55${cleanedNumber}`;
+  }
+  return cleanedNumber.length >= 12 && cleanedNumber.length <= 15 ? `+${cleanedNumber}` : '';
+};
+
 export default function SignupIndexView() {
   const [agreed, setAgreed] = useState(false);
   const { transferData } = useDataTransferContext();
@@ -44,7 +52,7 @@ export default function SignupIndexView() {
 
       transferData({
         redirect: `/auth/signup/confirm${redirectUrl}`,
-        data,
+        data: { email, password, phone_number, first_name, last_name },
       });
     } catch (error) {
       console.error(error);
@@ -160,7 +168,7 @@ export default function SignupIndexView() {
           <p>
             Já tem uma conta?{' '}
             <Link
-              href={'/auth/signin'}
+              href={`/auth/signin${redirectUrl}`}
               className="text-transparent bg-gradient-to-r from-brand-primary-100 to-brand-secondary-500 bg-clip-text"
             >
               {' '}
