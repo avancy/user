@@ -17,15 +17,16 @@ export async function getServerSideProps({ req, query }) {
   const { redirect } = query;
   const redirectUrl = redirect ? `?redirect=${encodeURIComponent(redirect)}` : '';
   const applicant = await fetchApplicant(req);
-
   if (applicant?.error) {
-    if (applicant.error === 'EmailNotVerifiedException') return { props: {} };
-    return {
-      redirect: {
-        destination: `/auth/signin${redirectUrl}`,
-        permanent: false,
-      },
-    };
+    // if (applicant.error === 'EmailNotVerifiedException')
+    return { props: {} };
+
+    // return {
+    //   redirect: {
+    //     destination: `/auth/signin${redirectUrl}`,
+    //     permanent: false,
+    //   },
+    // };
   }
 
   const { position_title, about, uploaded_resume } = applicant;

@@ -47,10 +47,6 @@ export default function SignupValidateCodeView() {
     setIsLoading(true);
 
     try {
-      if (!resendEmail) {
-        Notify.error('Por favor, insira seu e-mail!');
-        return;
-      }
       const user = await Auth.currentAuthenticatedUser();
 
       if (user.attributes.email_verified == 'true') {
@@ -63,16 +59,12 @@ export default function SignupValidateCodeView() {
 
       Notify.success('Código de confirmação enviado!');
     } catch (err) {
-      if (err.name === 'NotAuthorizedException') {
-        await Auth.resendSignUp(resendEmail);
-        setCanResend(false);
-        setTimeRemaining(20);
+      await Auth.resendSignUp(resendEmail);
+      setCanResend(false);
+      setTimeRemaining(20);
 
-        Notify.success('Código de confirmação enviado!');
-        return;
-      }
-
-      Notify.error(AUTH_ERROR_MESSAGES[err.name]);
+      Notify.success('Código de confirmação enviado!');
+      return;
     } finally {
       setIsLoading(false);
     }
@@ -121,7 +113,8 @@ export default function SignupValidateCodeView() {
           const currentUser = await Auth.currentAuthenticatedUser();
           setEmail(currentUser.attributes.email);
         } catch (error) {
-          console.error('Erro ao obter usuário autenticado:', error);
+          router.push(`/auth/signin${redirectUrl}`);
+          Notify.error('Erro ao obter usuário autenticado, por favor, faça login novamente.');
         }
       }
       fetchAuthenticatedUserEmail();
