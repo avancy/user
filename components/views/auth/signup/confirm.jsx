@@ -99,6 +99,8 @@ export default function SignupValidateCodeView() {
         router.push(`/auth/signup/info${redirectUrl}`);
       }
       setIsLoading(false);
+    } finally {
+      setIsLoading(false);
     }
   };
 
