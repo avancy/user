@@ -88,18 +88,16 @@ export default function SignupValidateCodeView() {
       }
     } catch (error) {
       console.error(error);
-
       if (error?.name === 'CodeMismatchException') {
         Notify.error('Código inválido.');
-      } else if (error?.name === 'UserNotConfirmedException') {
+      } else if (error?.name === 'ExpiredCodeException') {
+        Notify.error('O código expirou. Por favor, solicite um novo.');
+      } else {
         await Auth.confirmSignUp(email, confirmationCode);
         Notify.success('Conta confirmada com sucesso.');
         cleanData();
         router.push(`/auth/signup/info${redirectUrl}`);
-      } else {
-        Notify.error(AUTH_ERROR_MESSAGES[error.name]);
       }
-
       setIsLoading(false);
     }
   };
