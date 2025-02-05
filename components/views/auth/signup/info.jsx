@@ -16,6 +16,7 @@ const SchemaStepThree = yup.object({
 
 export default function SignupInfoView({ position_title, about, uploaded_resume }) {
   const [fileName, setFileName] = useState('');
+  const [mobileFile, setMobileFile] = useState(null);
   const router = useRouter();
   const {
     register,
@@ -47,19 +48,24 @@ export default function SignupInfoView({ position_title, about, uploaded_resume 
     const file = e.target.files[0];
     if (!file) return;
 
-    setValue('resume', file, { shouldValidate: true });
+    setMobileFile(file);
+    setValue('resume', file.name, { shouldValidate: true });
     setFileName(file.name);
   };
 
   const onSubmit = async ({ resume, position_title, about }) => {
     console.log('Arquivo enviado:', resume);
-    if (!resume) {
-      alert('Erro: Nenhum arquivo anexado!');
+    if (!resume && !mobileFile) {
+      Notify.error('Erro: Nenhum arquivo anexado!');
       return;
     }
 
     const formDataPdf = new FormData();
-    formDataPdf.append('file', resume);
+    if (mobileFile) {
+      formDataPdf.append('file', mobileFile);
+    } else {
+      formDataPdf.append('file', resume);
+    }
 
     await axios.post('/api/applicant/profile-about', { position_title, about });
 
@@ -70,8 +76,8 @@ export default function SignupInfoView({ position_title, about, uploaded_resume 
       router.push('/');
     } catch (err) {
       Notify.error('Erro ao enviar o curriculo');
-      alert('Erro ao enviar currículo: ' + err.message);
-      console.log(err);
+      console.error('Error details:', err.response?.data || err.message);
+      Notify.error('Erro ao enviar currículo: ' + (err.response?.data?.message || err.message));
     }
   };
 
