@@ -7,7 +7,7 @@ import * as yup from 'yup';
 import axios from 'axios';
 import FileIcon from '@/images/icons/FileIcon';
 
-const SchemaStepTheree = yup.object({
+const SchemaStepThree = yup.object({
   about: yup.string().required('Esse campo não pode ficar em branco'),
   position_title: yup.string().required('Esse campo não pode ficar em branco'),
   resume: yup.mixed().required('O currículo é obrigatório'),
@@ -23,40 +23,53 @@ export default function SignupInfoView({ position_title, about, uploaded_resume 
     setValue,
   } = useForm({
     mode: 'onChange',
-    resolver: yupResolver(SchemaStepTheree),
+    resolver: yupResolver(SchemaStepThree),
     defaultValues: {
       position_title,
       about,
     },
   });
 
+  useEffect(() => {
+    register('resume', { required: 'O currículo é obrigatório' });
+  }, [register]);
+
   const onDrop = (acceptedFiles) => {
     const file = acceptedFiles[0];
-    setValue('resume', file);
+    if (!file) return;
+
+    setValue('resume', file, { shouldValidate: true });
+    setFileName(file.name);
+  };
+
+  const onFileSelect = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setValue('resume', file, { shouldValidate: true });
     setFileName(file.name);
   };
 
   const onSubmit = async ({ resume, position_title, about }) => {
+    console.log('Arquivo enviado:', resume);
+    if (!resume) {
+      alert('Erro: Nenhum arquivo anexado!');
+      return;
+    }
+
     const formDataPdf = new FormData();
     formDataPdf.append('file', resume);
-    console.log(resume);
 
-    await axios.post('/api/applicant/profile-about', {
-      position_title,
-      about,
-    });
+    await axios.post('/api/applicant/profile-about', { position_title, about });
 
     try {
       await axios.post('/api/applicant/profile-resume', formDataPdf, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+        headers: { 'Content-Type': 'multipart/form-data' },
       });
+      router.push('/');
     } catch (err) {
       console.log(err);
     }
-
-    router.push('/');
   };
 
   useEffect(() => {
@@ -67,7 +80,7 @@ export default function SignupInfoView({ position_title, about, uploaded_resume 
         responseType: 'blob',
       }).then((response) => {
         const file = new File([response.data], uploaded_resume.name, {
-          contentType: 'application/pdf',
+          type: 'application/pdf',
         });
 
         setValue('resume', file);
@@ -87,19 +100,15 @@ export default function SignupInfoView({ position_title, about, uploaded_resume 
         </h3>
       </div>
 
-      <form
-        className="flex flex-col gap-2 px-4 mt-3 font-montserrat"
-        onSubmit={handleSubmit(onSubmit)}
-      >
+      <form className="flex flex-col gap-2 px-4 mt-3 font-montserrat" onSubmit={handleSubmit(onSubmit)}>
         <div>
           <label className="text-base font-semibold" htmlFor="position_title">
             Posição Atual: <span className="text-red-600">*</span>
           </label>
           <input
             {...register('position_title')}
-            onChange={(e) => setValue('position_title', e.target.value)}
             placeholder="Ex: Engenheiro Agrícola"
-            className="block w-full mt-1 text-base border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-gray-400"
+            className="block w-full mt-1 text-base border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
           />
           <p className="h-5 text-xs text-red-600">{errors.position_title?.message}</p>
         </div>
@@ -110,9 +119,8 @@ export default function SignupInfoView({ position_title, about, uploaded_resume 
           </label>
           <textarea
             {...register('about')}
-            onChange={(e) => setValue('about', e.target.value)}
             placeholder="Digite aqui informações úteis que podem ajudar na sua contratação."
-            className="block w-full mt-1 text-base border-gray-300 rounded-md shadow-sm resize-none focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-gray-400"
+            className="block w-full mt-1 text-base border-gray-300 rounded-md shadow-sm resize-none focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             rows={5}
           />
           <p className="h-5 text-xs text-red-600">{errors.about?.message}</p>
@@ -123,32 +131,44 @@ export default function SignupInfoView({ position_title, about, uploaded_resume 
             Anexar Currículo em PDF <span className="text-red-600">*</span>
           </label>
 
-          <Dropzone accept={'application/pdf'} multiple={false} onDrop={onDrop}>
+          {/* Dropzone para Desktop */}
+          <Dropzone accept={{ 'application/pdf': [] }} multiple={false} onDrop={onDrop}>
             {({ getRootProps, getInputProps, isDragActive }) => (
               <div
                 {...getRootProps()}
-                className={`relative flex hover:scale-105 duration-500 transition-all flex-col justify-between items-center w-full max-w-[320px] md:max-w-none lg:max-w-none h-auto p-4 border border-dashed shadow-lg rounded-[20px] mx-auto ${
-                  isDragActive && 'bg-[#C2B54126] scale-105 duration-500 transition-all'
+                className={`relative flex flex-col items-center w-full p-4 border border-dashed shadow-lg rounded-[20px] mx-auto ${
+                  isDragActive ? 'bg-[#C2B54126] scale-105' : ''
                 }`}
               >
-                <div className="flex flex-col items-center justify-center w-full gap-2">
-                  <FileIcon />
-
-                  {fileName ? (
-                    <p className="max-w-full text-sm text-green-600 truncate">
-                      Arquivo anexado: <strong>{fileName}</strong>
-                    </p>
-                  ) : (
-                    <span className="font-helvetica cursor-pointer text-[#195579] underline">
-                      Anexar arquivo
-                    </span>
-                  )}
-                </div>
-
+                <FileIcon />
+                {fileName ? (
+                  <p className="max-w-full text-sm text-green-600 truncate">
+                    Arquivo anexado: <strong>{fileName}</strong>
+                  </p>
+                ) : (
+                  <span className="font-helvetica cursor-pointer text-[#195579] underline">
+                    Toque ou arraste um arquivo aqui
+                  </span>
+                )}
                 <input {...getInputProps()} accept="application/pdf" />
               </div>
             )}
           </Dropzone>
+
+          {/* Input normal para Mobile */}
+          <input
+            type="file"
+            accept="application/pdf"
+            className="hidden"
+            id="fileUpload"
+            onChange={onFileSelect}
+          />
+          <label
+            htmlFor="fileUpload"
+            className="mt-2 block w-full text-center text-sm font-semibold cursor-pointer text-[#195579] underline"
+          >
+            Ou clique aqui para selecionar um arquivo
+          </label>
 
           <p className="h-5 text-xs text-red-600">{errors.resume?.message}</p>
         </div>
