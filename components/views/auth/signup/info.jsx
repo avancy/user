@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import * as yup from 'yup';
 import axios from 'axios';
 import FileIcon from '@/images/icons/FileIcon';
+import { Notify } from '@/components/common/notification';
 
 const SchemaStepThree = yup.object({
   about: yup.string().required('Esse campo não pode ficar em branco'),
@@ -68,6 +69,8 @@ export default function SignupInfoView({ position_title, about, uploaded_resume 
       });
       router.push('/');
     } catch (err) {
+      Notify.error('Erro ao enviar o curriculo');
+      alert('Erro ao enviar currículo: ' + err.message);
       console.log(err);
     }
   };
