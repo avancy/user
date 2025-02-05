@@ -95,9 +95,10 @@ export default function SignupValidateCodeView() {
         Notify.error('O código expirou. Por favor, solicite um novo.');
       } else {
         await Auth.confirmSignUp(email, confirmationCode);
+        await Auth.signIn(email, newUser.password);
         Notify.success('Conta confirmada com sucesso.');
         cleanData();
-        router.push(`/auth/signup/info${redirectUrl}`);
+        router.push(`/auth/signup/info${redirectUrl}`, undefined, { shallow: true });
       }
       setIsLoading(false);
     } finally {
@@ -119,8 +120,8 @@ export default function SignupValidateCodeView() {
         }
       }
       fetchAuthenticatedUserEmail();
-    }
-  }, [newUser]);
+    } 
+  }, []);
 
   useEffect(() => {
     if (!canResend) {

@@ -31,12 +31,13 @@ export default function SignupIndexView() {
     }
 
     try {
+      const formatedPhoneNumber = formatPhoneNumberForAWS(phone_number);
       await Auth.signUp({
         username: email,
         password: password,
         attributes: {
           email: email,
-          phone_number: formatPhoneNumberForAWS(phone_number),
+          phone_number: formatedPhoneNumber,
           'custom:first_name': first_name,
           'custom:last_name': last_name,
           'custom:company_id': '57e635df-94d1-4f2f-9237-5eb9ebbbdae6',
