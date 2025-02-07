@@ -1,6 +1,7 @@
 const TYPE = {
   PAGE: 'page',
   POPUP: 'popup',
+  EXTERNAL: 'external',
 };
 
 export const NAVIGATION = {
@@ -11,6 +12,7 @@ export const NAVIGATION = {
   ],
   USER: [
     { name: 'Currículo', type: TYPE.POPUP },
+    { name: 'Vagas', href: 'https://mavielorh.com.br/vagas', type: TYPE.EXTERNAL },
   ],
   TYPE,
 };

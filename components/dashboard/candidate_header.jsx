@@ -270,31 +270,52 @@ export function CandidateHeader({ user, signOut, openProfessionalProfile }) {
                   <Menu.Items className="absolute right-0 z-10 py-1 mt-2 origin-top-right bg-white rounded-md shadow-lg w-60 ring-1 ring-black ring-opacity-5 focus:outline-none">
                     {NAVIGATION.USER.map((item) => (
                       <Menu.Item key={item.name}>
-                        {({ active }) =>
-                          item.type === 'popup' ? (
-                            <button
-                              key={item.name}
-                              onClick={() => openProfessionalProfile(true)}
-                              className={classNames(
-                                isRouteActive(item.href, router.pathname) ? 'bg-gray-100' : '',
-                                'block px-4 py-2 text-sm text-gray-700 w-full text-left',
-                              )}
-                            >
-                              {item.name}
-                            </button>
-                          ) : (
-                            <a
-                              key={item.name}
-                              href={item.href}
-                              className={classNames(
-                                isRouteActive(item.href, router.pathname) ? 'bg-gray-100' : '',
-                                'block px-4 py-2 text-sm text-gray-700',
-                              )}
-                            >
-                              {item.name}
-                            </a>
-                          )
-                        }
+                        {({ active }) => {
+                          switch (item.type) {
+                            case NAVIGATION.TYPE.POPUP:
+                              return (
+                                <button
+                                  key={item.name}
+                                  onClick={() => openProfessionalProfile(true)}
+                                  className={classNames(
+                                    isRouteActive(item.href, router.pathname) ? 'bg-gray-100' : '',
+                                    'block px-4 py-2 text-sm text-gray-700 w-full text-left hover:bg-gray-100',
+                                  )}
+                                >
+                                  {item.name}
+                                </button>
+                              );
+                            case NAVIGATION.TYPE.PAGE:
+                              return (
+                                <a
+                                  key={item.name}
+                                  href={item.href}
+                                  className={classNames(
+                                    isRouteActive(item.href, router.pathname) ? 'bg-gray-100' : '',
+                                    'block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100',
+                                  )}
+                                >
+                                  {item.name}
+                                </a>
+                              );
+                            case NAVIGATION.TYPE.EXTERNAL:
+                              return (
+                                <a
+                                  key={item.name}
+                                  href={item.href}
+                                  target="_blank"
+                                  className={classNames(
+                                    isRouteActive(item.href, router.pathname) ? 'bg-gray-100' : '',
+                                    'block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100',
+                                  )}
+                                >
+                                  {item.name}
+                                </a>
+                              );
+                            default:
+                              return null;
+                          }
+                        }}
                       </Menu.Item>
                     ))}
                     <Menu.Item>
