@@ -47,8 +47,6 @@ export default function SignupIndexView() {
         },
       });
 
-      // await Auth.resendSignUp(email);
-
       Notify.success('Usuário cadastrado com sucesso. Iniciando processo de validação do e-mail.');
 
       transferData({
@@ -141,6 +139,9 @@ export default function SignupIndexView() {
     },
   };
 
+  const handleSignin = () =>
+    router.push(`/auth/signin${redirectUrl}`, undefined, { shallow: true });
+
   return (
     <>
       <div className="mt-4 text-4xl font-bold text-center font-montserrat md:mt-12">
@@ -168,13 +169,13 @@ export default function SignupIndexView() {
         <div className="flex items-center justify-center pt-4 text-base font-helvetica">
           <p>
             Já tem uma conta?{' '}
-            <Link
-              href={`/auth/signin${redirectUrl}`}
+            <button
+              onClick={handleSignin}
               className="text-transparent bg-gradient-to-r from-brand-primary-100 to-brand-secondary-500 bg-clip-text"
             >
               {' '}
               Acessar Minha Conta
-            </Link>
+            </button>
           </p>
         </div>
       </div>

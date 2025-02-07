@@ -18,6 +18,7 @@ export default function SignupInfoView({ position_title, about, uploaded_resume 
   const [fileName, setFileName] = useState('');
   const [mobileFile, setMobileFile] = useState(null);
   const router = useRouter();
+  const { redirect } = router.query;
   const {
     register,
     handleSubmit,
@@ -72,7 +73,7 @@ export default function SignupInfoView({ position_title, about, uploaded_resume 
       await axios.post('/api/applicant/profile-resume', formDataPdf, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
-      router.push('/');
+      router.push(redirect ? decodeURIComponent(redirect) : '/');
     } catch (err) {
       Notify.error('Erro ao enviar o curriculo');
       console.error('Error details:', err.response?.data || err.message);
