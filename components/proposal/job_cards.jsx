@@ -3,6 +3,7 @@ import SwiperCarousel from './swiper';
 import { BtnSwiper } from '../common/buttons/swiper';
 import Image from 'next/image';
 import Seta from '@/public/images/seta.png';
+import clsx from 'clsx';
 
 export default function JobCards({ jobs }) {
   const swiperRef = useRef(null);
@@ -13,7 +14,7 @@ export default function JobCards({ jobs }) {
   }
 
   return (
-    <div className="relative flex items-center w-full">
+    <div className={clsx("relative flex w-full", isPaginationActive ? 'items-center': 'items-start')}>
       {isPaginationActive && (
         <Image
           src={Seta}

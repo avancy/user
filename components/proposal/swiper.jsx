@@ -30,7 +30,7 @@ export default function SwiperCarousel({ data, swiperRef, setIsPaginationActive 
         dynamicBullets: true,
         dynamicMainBullets: 4,
       }}
-      className="flex"
+      className="flex w-full"
       initialSlide={0}
     >
       {data.map((item, i) => (
