@@ -36,33 +36,31 @@ export function CandidateHeader({ user, signOut, openProfessionalProfile }) {
                   <Image priority src={MavieloLogo} alt="Logo MavieloRH" className="w-auto h-11" />
                 </Link>
               </div>
-              <nav
-                aria-label="Global"
-                className="hidden lg:ml-16 lg:flex lg:items-center lg:gap-x-10"
-              >
-                {NAVIGATION.HOME.map((item, index) => (
-                  <div key={index} className="relative group">
-                    <Link
-                      href={item.href}
-                      className={classNames(
-                        'px-3 py-2 text-sm font-medium text-gray-900 rounded-md relative z-10',
-                        isRouteActive(item.href, router.pathname)
-                          ? 'text-gray-900'
-                          : 'text-gray-500',
-                      )}
-                    >
-                      {item.name}
-                    </Link>
-                    <span
-                      className={clsx(
-                        'absolute bottom-0 left-0 w-full h-[3px] group-hover:max-w-full transition-all duration-300 bg-gradient-to-r from-brand-primary-100 to-brand-secondary-500 rounded-md',
-                        isRouteActive(item.href, router.pathname) ? '' : 'max-w-0',
-                      )}
-                    />
-                  </div>
-                ))}
-              </nav>
             </div>
+            <nav
+              aria-label="Global"
+              className="hidden lg:ml-16 lg:flex lg:items-center lg:gap-x-10"
+            >
+              {NAVIGATION.HOME.map((item, index) => (
+                <div key={index} className="relative group">
+                  <Link
+                    href={item.href}
+                    className={classNames(
+                      'px-3 py-2 text-sm font-medium text-gray-900 rounded-md relative z-10',
+                      isRouteActive(item.href, router.pathname) ? 'text-gray-900' : 'text-gray-500',
+                    )}
+                  >
+                    {item.name}
+                  </Link>
+                  <span
+                    className={clsx(
+                      'absolute bottom-0 left-0 w-full h-[3px] group-hover:max-w-full rounded-full transition-all duration-300 bg-gradient-to-r from-brand-primary-100 to-brand-secondary-500 rounded-md',
+                      isRouteActive(item.href, router.pathname) ? '' : 'max-w-0',
+                    )}
+                  />
+                </div>
+              ))}
+            </nav>
             {/* <div className="flex items-center justify-center flex-1 px-2 lg:ml-6 lg:justify-end">
               <div className="max-w-lg lg:max-w-xs">
                 <BtnBase
@@ -227,7 +225,7 @@ export function CandidateHeader({ user, signOut, openProfessionalProfile }) {
                 </Transition.Child>
               </div>
             </Transition.Root>
-            <div className="hidden gap-20 lg:ml-4 lg:flex lg:items-center">
+            <div className="hidden gap-10 lg:ml-4 lg:flex lg:items-center w-[228px]">
               <button
                 type="button"
                 className="flex-shrink-0 p-1 text-gray-400 transition-all duration-300 bg-white rounded-full hover:scale-90 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"

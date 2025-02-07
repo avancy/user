@@ -50,25 +50,29 @@ export default function ApplicationsView({ applicant }) {
 
   return (
     <ProposalProvider>
-      <div className="flex items-center justify-center w-full">
-        <div className="xl:mx-32 w-full max-w-[1680px] sm:px-11 px-2 font-montserrat">
-          <div className="flex flex-col items-center w-full gap-9">
-            <h1 className="w-full text-4xl font-bold text-transparent bg-gradient-to-r from-brand-gradient-primary to-brand-gradient-secondary bg-clip-text">
-              SEJA BEM-VINDO(A)!
-            </h1>
+      <div className='w-full'>
+        <div className="flex items-center justify-center w-full sm:px-6 xl:px-32">
+          <div className=" w-full max-w-[1680px] px-2 sm:px-5 md:px-8 font-montserrat">
+            <div className="flex flex-col items-center w-full gap-9">
+              <h1 className="w-full text-4xl font-bold text-transparent bg-gradient-to-r from-brand-gradient-primary to-brand-gradient-secondary bg-clip-text">
+                SEJA BEM-VINDO(A)!
+              </h1>
 
-            <div className="w-full h-auto">
-              <h2 className="text-lg font-medium tracking-wide uppercase">Candidaturas Ativas:</h2>
-              <JobCards jobs={sortJobs(publishedJobs)} />
+              <div className="w-full h-auto">
+                <h2 className="text-lg font-medium tracking-wide uppercase">
+                  Candidaturas Ativas:
+                </h2>
+                <JobCards jobs={sortJobs(publishedJobs)} />
+              </div>
+              <div className="w-full h-auto">
+                <h2 className="text-lg font-medium tracking-wide uppercase">Vagas Encerradas:</h2>
+                <JobCards jobs={sortJobs(archivedJobs, 'archived')} />
+              </div>
             </div>
-            <div className="w-full h-auto">
-              <h2 className="text-lg font-medium tracking-wide uppercase">Vagas Encerradas:</h2>
-              <JobCards jobs={sortJobs(archivedJobs, 'archived')} />
-            </div>
+
+            <ConfirmProposal applicant={applicant} />
+            <ProposalForm />
           </div>
-
-          <ConfirmProposal applicant={applicant} />
-          <ProposalForm />
         </div>
       </div>
     </ProposalProvider>

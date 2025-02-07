@@ -24,8 +24,8 @@ export default function JobCard({ job, job_proposal, stage, required_disc = fals
     <div
       key={job?.id}
       className={classNames(
-        'ring-1 ring-gray-400 flex-1 p-6 xl:pt-[22px] rounded-[14px] bg-white shadow-xl shadow-gray-600/30',
-        'md:w-[343px] h-[320px] md:h-[212px] flex flex-col justify-between',
+        'ring-1 ring-gray-200 flex-1 p-6 xl:pt-[22px] rounded-[14px] bg-white shadow-sm shadow-gray-600/30',
+        'h-[320px] md:h-[212px] flex flex-col justify-between',
         job?.archived ? 'opacity-40 pointer-events-none' : '',
       )}
     >

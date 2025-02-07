@@ -22,15 +22,9 @@ export default function SwiperCarousel({ data, swiperRef, setIsPaginationActive 
       centeredSlides={false}
       slidesPerView={1}
       breakpoints={{
-        768: { slidesPerView: 2.2 },
-        878: { slidesPerView: 2.4 },
-        1024: { slidesPerView: 2.6 },
-        1108: { slidesPerView: 2.8 },
-        1208: { slidesPerView: 3.2 },
+        768: { slidesPerView: 2 },
         1392: { slidesPerView: 3 },
         1792: { slidesPerView: 4 },
-        2142: { slidesPerView: 5 },
-        2780: { slidesPerView: 6 },
       }}
       pagination={{
         dynamicBullets: true,
@@ -39,8 +33,8 @@ export default function SwiperCarousel({ data, swiperRef, setIsPaginationActive 
       className="flex"
       initialSlide={0}
     >
-      {data.map((item, i) => (
-        <SwiperSlide className="flex pl-[1px] mt-3 pr-7 py-7" key={`${i} - ${item.title}`}>
+      {[...data, ...data, ...data].map((item, i) => (
+        <SwiperSlide className="flex px-1 py-7" key={`${i} - ${item.title}`}>
           <JobCard
             job={item?.job}
             job_proposal={item?.job_proposal || null}
