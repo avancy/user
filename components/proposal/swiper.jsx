@@ -40,7 +40,7 @@ export default function SwiperCarousel({ data, swiperRef, setIsPaginationActive 
       initialSlide={0}
     >
       {data.map((item, i) => (
-        <SwiperSlide className="flex mt-3 p-7" key={`${i} - ${item.title}`}>
+        <SwiperSlide className="flex pl-[1px] mt-3 pr-7 py-7" key={`${i} - ${item.title}`}>
           <JobCard
             job={item?.job}
             job_proposal={item?.job_proposal || null}

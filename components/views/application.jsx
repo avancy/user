@@ -13,12 +13,13 @@ import {
 } from '../../lib/functions/proposal';
 
 export default function ApplicationsView({ applicant }) {
+  const [isLinkExpired, setIsLinkExpired] = useState(false);
   const [applications, setApplications] = useState([]);
-  const router = useRouter();
-  const [jobInfo, setJobInfo] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [jobInvites, setJobInvites] = useState([]);
-  const [isLinkExpired, setIsLinkExpired] = useState(false);
+  const [jobInfo, setJobInfo] = useState(null);
+
+  const router = useRouter();
 
   const publishedJobs =
     applications?.filter((application) => application.job.published && !application.job.archived) ||
@@ -49,22 +50,26 @@ export default function ApplicationsView({ applicant }) {
 
   return (
     <ProposalProvider>
-      <div className="px-6 xl:mx-32 xl:px-0 font-montserrat">
-        <div className="flex flex-col items-center w-full gap-9">
-          <h1 className='w-full text-4xl font-bold text-transparent bg-gradient-to-r from-brand-gradient-primary to-brand-gradient-secondary bg-clip-text'>SEJA BEM-VINDO(A)!</h1>
+      <div className="flex items-center justify-center w-full">
+        <div className="xl:mx-32 w-full max-w-[1680px] sm:px-11 px-2 font-montserrat">
+          <div className="flex flex-col items-center w-full gap-9">
+            <h1 className="w-full text-4xl font-bold text-transparent bg-gradient-to-r from-brand-gradient-primary to-brand-gradient-secondary bg-clip-text">
+              SEJA BEM-VINDO(A)!
+            </h1>
 
-          <div className="w-full h-auto">
-            <h2 className="text-lg font-medium tracking-wide uppercase">Candidaturas Ativas:</h2>
-            <JobCards jobs={sortJobs(publishedJobs)} />
+            <div className="w-full h-auto">
+              <h2 className="text-lg font-medium tracking-wide uppercase">Candidaturas Ativas:</h2>
+              <JobCards jobs={sortJobs(publishedJobs)} />
+            </div>
+            <div className="w-full h-auto">
+              <h2 className="text-lg font-medium tracking-wide uppercase">Vagas Encerradas:</h2>
+              <JobCards jobs={sortJobs(archivedJobs, 'archived')} />
+            </div>
           </div>
-          <div className="w-full h-auto">
-            <h2 className="text-lg font-medium tracking-wide uppercase">Vagas Encerradas:</h2>
-            <JobCards jobs={sortJobs(archivedJobs, 'archived')} />
-          </div>
+
+          <ConfirmProposal applicant={applicant} />
+          <ProposalForm />
         </div>
-
-        <ConfirmProposal applicant={applicant} />
-        <ProposalForm />
       </div>
     </ProposalProvider>
   );

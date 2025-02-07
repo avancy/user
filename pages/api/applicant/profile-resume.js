@@ -62,7 +62,7 @@ const multerConfig = {
   fileFilter: (req, file, cb) => {
     // const allowedMimes = ['application/pdf'];
     // if (allowedMimes.includes(file.mimetype)) {
-      cb(null, true);
+    cb(null, true);
     // } else {
     //   cb(new Error('Invalid file type.'));
     // }

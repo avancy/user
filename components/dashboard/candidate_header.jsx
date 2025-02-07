@@ -13,6 +13,7 @@ import {
   BellIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
+import clsx from 'clsx';
 
 export function CandidateHeader({ user, signOut, openProfessionalProfile }) {
   const router = useRouter();
@@ -25,8 +26,8 @@ export function CandidateHeader({ user, signOut, openProfessionalProfile }) {
   const redirectTo = 'https://mavielorh.com.br';
 
   return (
-    <>
-      <header className="border-b-2 border-gray-100 xl:mx-32">
+    <div className="flex items-center justify-center w-full">
+      <header className="border-b-2 border-gray-100 py-2 xl:mx-32 sm:mx-6 w-full max-w-[1680px]">
         <div className="max-w-full sm:px-4 lg:px-8">
           <Popover className="flex justify-between h-16">
             <div className="flex px-2 lg:px-0">
@@ -37,10 +38,10 @@ export function CandidateHeader({ user, signOut, openProfessionalProfile }) {
               </div>
               <nav
                 aria-label="Global"
-                className="hidden lg:ml-16 lg:flex lg:items-center lg:space-x-20"
+                className="hidden lg:ml-16 lg:flex lg:items-center lg:gap-x-10"
               >
                 {NAVIGATION.HOME.map((item, index) => (
-                  <div key={index} className="relative">
+                  <div key={index} className="relative mt-2 group">
                     <Link
                       href={item.href}
                       className={classNames(
@@ -52,9 +53,12 @@ export function CandidateHeader({ user, signOut, openProfessionalProfile }) {
                     >
                       {item.name}
                     </Link>
-                    {isRouteActive(item.href, router.pathname) && (
-                      <span className="absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-brand-primary-100 to-brand-secondary-500 rounded-md" />
-                    )}
+                    <span
+                      className={clsx(
+                        'absolute bottom-0 left-0 w-full h-[3px] group-hover:max-w-full transition-all duration-300 bg-gradient-to-r from-brand-primary-100 to-brand-secondary-500 rounded-md',
+                        isRouteActive(item.href, router.pathname) ? '' : 'max-w-0',
+                      )}
+                    />
                   </div>
                 ))}
               </nav>
@@ -330,6 +334,6 @@ export function CandidateHeader({ user, signOut, openProfessionalProfile }) {
           </Popover>
         </div>
       </header>
-    </>
+    </div>
   );
 }

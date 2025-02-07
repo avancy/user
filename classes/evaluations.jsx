@@ -4,7 +4,9 @@ import { api } from '@/lib/api';
 class Applicant {
   static async get({ evaluation_id, id, onSuccess, onError, onFinally }) {
     try {
-      const endpoint = evaluation_id ? `/applicant_evaluations/by_evaluation_id/${evaluation_id}` : `/applicant_evaluations/by_id/${id}`;
+      const endpoint = evaluation_id
+        ? `/applicant_evaluations/by_evaluation_id/${evaluation_id}`
+        : `/applicant_evaluations/by_id/${id}`;
       const { data } = await api.get(endpoint);
       onSuccess && onSuccess(data);
     } catch (error) {
@@ -85,7 +87,9 @@ class Applicant {
 export class EvaluationManager {
   static async getAll({ job_id, stage_id, onSuccess, onError, onFinally }) {
     try {
-      const endpoint = stage_id ? `/evaluations/by_stage/${stage_id}` : `/evaluations/by_job/${job_id}`;
+      const endpoint = stage_id
+        ? `/evaluations/by_stage/${stage_id}`
+        : `/evaluations/by_job/${job_id}`;
       const { data } = await api.get(endpoint);
       onSuccess && onSuccess(data);
     } catch (error) {
@@ -114,4 +118,3 @@ export class EvaluationManager {
 }
 
 export default EvaluationManager;
-

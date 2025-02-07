@@ -20,7 +20,6 @@ export function Evaluation({ evaluation, job_id }) {
       ></div>
 
       {/* Status Badge */}
-      {console.log(statusColor)}
       <div
         className={`absolute top-4 z-10 right-4 px-3 py-1 text-xs font-semibold text-white rounded-full ${statusColor}`}
       >
@@ -66,7 +65,7 @@ export function Evaluation({ evaluation, job_id }) {
 
       <button className="w-full rounded-full bg-brand-gradient-secondary h-10 flex justify-center items-center font-montserrat font-bold hover:shadow-lg hover:scale-[1.02] transition-all duration-300">
         <Link
-          className='w-full'
+          className="w-full"
           href={`/evaluations/execute?evaluation_id=${encodeURIComponent(evaluation.id)}&stage_id=${encodeURIComponent(evaluation.stage_id)}&job_id=${encodeURIComponent(job_id)}`}
         >
           Iniciar Teste

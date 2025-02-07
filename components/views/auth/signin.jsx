@@ -1,9 +1,9 @@
 import { FormBuilder, InputType, InputWidth, LabelStyle } from '../../common/form_builder';
 import { useDataTransferContext } from '@/contexts/data_transfer';
-import { FormAlertError } from '@/components/form_alert_error';
 import { BtnBase } from '@/components/common/buttons/base';
 import { LinkedInIcon } from '@/images/icons/LinkedinIcon';
 import { Notify } from '@/components/common/notification';
+import { AUTH_ERROR_MESSAGES } from '@/constrants/auth';
 import { LoadSpinner } from '../../common/modal/types';
 import { useRouter } from 'next/router';
 import { Auth } from 'aws-amplify';
@@ -11,7 +11,6 @@ import { useState } from 'react';
 import Link from 'next/link';
 import * as yup from 'yup';
 import axios from 'axios';
-import { AUTH_ERROR_MESSAGES } from '@/constrants/auth';
 
 const formLogin = {
   email: {
@@ -54,7 +53,6 @@ export default function Login() {
       if (!changePasswordRequired && user.challengeName === 'NEW_PASSWORD_REQUIRED') {
         setChangePasswordRequired(true);
       }
-
       if (!user?.signInUserSession?.idToken?.payload?.email_verified) {
         Notify.warning('O Email ainda não foi confirmado. Redirecionando...');
         transferData({
@@ -66,7 +64,6 @@ export default function Login() {
         });
         return;
       }
-
       const [profileAboutResponse, profileResumeResponse] = await Promise.all([
         axios.get('/api/applicant/profile-about'),
         axios.get('/api/applicant/profile-resume'),
@@ -74,7 +71,6 @@ export default function Login() {
 
       const { position_title: positionTitle, about } = profileAboutResponse.data || {};
       const resumeData = profileResumeResponse.data;
-
       if (!positionTitle || !about || !resumeData || !resumeData.url) {
         Notify.warning('O seu perfil não está completo. Redirecionando...');
         transferData({
@@ -90,6 +86,7 @@ export default function Login() {
     } catch (error) {
       console.error(error);
       const errorName = error.name;
+
       if (['UserNotConfirmedException', 'UserNotFoundException'].includes(errorName)) {
         Notify.warning('O Email ainda não foi confirmado. Redirecionando...');
         transferData({

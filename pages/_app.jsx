@@ -56,7 +56,7 @@ function MyApp({ Component, pageProps }) {
           <Modal />
           <Alert />
           {getLayout(<Component {...pageProps} />)}
-        </DataTransferProvider>   
+        </DataTransferProvider>
       </Authenticator.Provider>
     </>
   );

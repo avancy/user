@@ -54,7 +54,6 @@ export default function SignupInfoView({ position_title, about, uploaded_resume 
   };
 
   const onSubmit = async ({ resume, position_title, about }) => {
-    console.log('Arquivo enviado:', resume);
     if (!resume && !mobileFile) {
       Notify.error('Erro: Nenhum arquivo anexado!');
       return;
@@ -109,7 +108,10 @@ export default function SignupInfoView({ position_title, about, uploaded_resume 
         </h3>
       </div>
 
-      <form className="flex flex-col gap-2 px-4 mt-3 font-montserrat" onSubmit={handleSubmit(onSubmit)}>
+      <form
+        className="flex flex-col gap-2 px-4 mt-3 font-montserrat"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <div>
           <label className="text-base font-semibold" htmlFor="position_title">
             Posição Atual: <span className="text-red-600">*</span>

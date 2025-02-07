@@ -44,8 +44,8 @@ export default function TempExecuteDisc({ applicant }) {
         setDisc(null);
       }
     } catch (err) {
-      if (err.request.status === 404) return
-      
+      if (err.request.status === 404) return;
+
       Notify.error('Erro ao buscar dados de DISC, tente novamente mais tarde');
       console.error(err);
       setDisc(null);
@@ -67,7 +67,7 @@ export default function TempExecuteDisc({ applicant }) {
   }
 
   if (disc !== null) {
-    return <DiscFinish applicant={applicant} disc={disc} />;
+    return <DiscFinish applicant={applicant} disc={disc} restartDisc={() => setDisc(null)} />;
   }
 
   return (

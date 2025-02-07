@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import SwiperCarousel from './swiper';
-import {BtnSwiper} from '../common/buttons/swiper';
+import { BtnSwiper } from '../common/buttons/swiper';
 
 export default function JobCards({ jobs }) {
   const swiperRef = useRef(null);

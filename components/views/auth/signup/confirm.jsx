@@ -75,7 +75,6 @@ export default function SignupValidateCodeView() {
 
     try {
       const user = await Auth.currentAuthenticatedUser();
-      console.log(user)
 
       if (user.attributes.email_verified == 'true') {
         Notify.success('E-mail já está verificado.');
@@ -120,7 +119,7 @@ export default function SignupValidateCodeView() {
         }
       }
       fetchAuthenticatedUserEmail();
-    } 
+    }
   }, []);
 
   useEffect(() => {

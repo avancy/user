@@ -13,8 +13,6 @@ export default function Applications({ applicant }) {
 export async function getServerSideProps({ req }) {
   const applicant = await fetchApplicant(req);
   const redirectUrl = `?redirect=${encodeURIComponent(req.url)}`;
-  console.log('==========================================');
-  console.log(applicant);
   if (applicant == null) {
     return {
       redirect: {
