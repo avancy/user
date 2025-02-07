@@ -41,7 +41,7 @@ export function CandidateHeader({ user, signOut, openProfessionalProfile }) {
                 className="hidden lg:ml-16 lg:flex lg:items-center lg:gap-x-10"
               >
                 {NAVIGATION.HOME.map((item, index) => (
-                  <div key={index} className="relative mt-2 group">
+                  <div key={index} className="relative group">
                     <Link
                       href={item.href}
                       className={classNames(
