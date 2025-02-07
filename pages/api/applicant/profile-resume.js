@@ -60,12 +60,12 @@ const multerConfig = {
     fileSize: MAX_SIZE_10_MEGABYTES,
   },
   fileFilter: (req, file, cb) => {
-    const allowedMimes = ['application/pdf'];
-    if (allowedMimes.includes(file.mimetype)) {
-      cb(null, true);
-    } else {
-      cb(new Error('Invalid file type.'));
-    }
+    // const allowedMimes = ['application/pdf'];
+    // if (allowedMimes.includes(file.mimetype)) {
+    cb(null, true);
+    // } else {
+    //   cb(new Error('Invalid file type.'));
+    // }
   },
 };
 

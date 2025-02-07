@@ -1,23 +1,23 @@
+'use client';
+
 import { FormBuilder, InputType, InputWidth } from '@/components/common/form_builder';
 import CandidateHomeLayout from '@/components/dashboard/candidate_home_layout';
+import { fetchApplicant } from '@/lib/services/server_side_props';
 import { Notify } from '@/components/common/notification';
 import { formatPhoneNumber } from '@/components/masks';
-import { useEffect, useRef, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Auth } from 'aws-amplify';
 import { api } from '@/lib/api';
 import * as yup from 'yup';
-import {
-  fetchApplicant,
-  fetchCompanyCustomization,
-  fetchCompanyIdByHost,
-  getHost,
-} from '@/lib/services/server_side_props';
+import Cropper from 'react-easy-crop';
+import Image from 'next/image';
 
 function FormUser({ user, photoPath }) {
   const inputRef = useRef(null);
   const [avatarPicImg, setAvatarPicImg] = useState(null);
   const router = useRouter();
+  const [isSaving, setIsSaving] = useState(false);
 
   const form = {
     firstName: {
@@ -66,24 +66,6 @@ function FormUser({ user, photoPath }) {
     },
   };
 
-  const [isSaving, setIsSaving] = useState(false);
-
-  const handleChangeClick = (e) => {
-    e.preventDefault();
-    inputRef.current.click();
-  };
-
-  const handleAvatarChange = (e) => {
-    const file = e.target.files[0];
-
-    if (!file.type.startsWith('image/')) {
-      Notify.error('Por favor, selecione uma imagem válida.');
-      return;
-    }
-
-    setAvatarPicImg(file);
-  };
-
   const handleSave = async (e) => {
     setIsSaving(true);
 
@@ -94,13 +76,11 @@ function FormUser({ user, photoPath }) {
     formData.append('first_name', e?.firstName ?? '');
     formData.append('last_name', e?.lastName ?? '');
     formData.append('phone_number', formattedPhoneNumber ?? '');
-    formData.append('file', avatarPicImg ?? null);
+    if (avatarPicImg) formData.append('file', avatarPicImg);
 
     try {
-      const response = await api.put('/update_user_attribute', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+      await api.put('/update_user_attribute', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
       });
       Notify.success('Dados atualizados com sucesso.');
       router.reload();
@@ -113,67 +93,31 @@ function FormUser({ user, photoPath }) {
   };
 
   return (
-    <div className="font-montserrat">
+    <div className="max-w-full overflow-x-hidden font-montserrat">
       <main>
         <div className="divide-y divide-white/5">
           <div className="flex flex-col items-center justify-center w-11/12 mx-auto">
-            <div className="flex flex-col items-center justify-center w-full">
-              <h1 className="text-3xl font-bold font-montserrat">Meus Dados</h1>
-            </div>
-
+            <h1 className="text-3xl font-bold">Meus Dados</h1>
             <div className="w-full max-w-2xl mt-6">
-              <div className="flex flex-col items-center justify-center">
-                <div className="relative flex items-center gap-x-8">
-                  <div className="relative group">
-                    <input
+              <div className="flex flex-col items-center">
+                <div className="flex md:flex-row flex-col w-screen max-w-[1300px] p-3 gap-5 mt-6">
+                  <div className="flex-1">
+                    <FormImage
                       ref={inputRef}
-                      onChange={handleAvatarChange}
-                      type="file"
-                      accept="image/png, image/jpeg, image/jpg"
-                      className="hidden"
+                      photoPath={photoPath}
+                      setAvatarPicImg={setAvatarPicImg}
                     />
-                    {avatarPicImg ? (
-                      <img
-                        src={URL.createObjectURL(avatarPicImg)}
-                        alt="Avatar"
-                        className="flex-none object-cover rounded-lg w-44 h-44"
-                      />
-                    ) : (
-                      <img
-                        src={`${photoPath ? photoPath : 'https://img.freepik.com/free-vector/illustration-businessman_53876-5856.jpg?w=740&t=st=1695652429~exp=1695653029~hmac=66ece5ea16c8571b1e89676eec2d964bc8aa2c4054aa2a543c92ec2c54f098b9'}`}
-                        alt="Avatar"
-                        className="flex-none object-cover bg-gray-800 rounded-lg w-44 h-44"
-                      />
-                    )}
-                    <div
-                      className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50 rounded-lg opacity-100 cursor-pointer group-hover:opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
-                      onClick={handleChangeClick}
-                    >
-                      <span className="px-4 py-2 text-sm font-semibold text-center text-white rounded-4xl bg-primary/40">
-                        Escolher imagem
-                      </span>
-                      <span className="px-4 py-2 text-sm font-semibold text-center text-white rounded-4xl">
-                        JPG, PNG.
-                      </span>
-                    </div>
+                    <FormBuilder
+                      form={form}
+                      cancel={false}
+                      submitStyle="hover:scale-105 transition-all w-full bg-[#24EEA0] h-12 rounded-full font-bold text-lg disabled:opacity-40"
+                      btnSubmitLabel="Salvar Alterações"
+                      onSubmit={handleSave}
+                    />
                   </div>
-                </div>
-
-                <p className="font-semibold text-center">Foto de perfil</p>
-
-                <div className="w-full max-w-2xl mt-6">
-                  <FormBuilder
-                    form={form}
-                    cancel={false}
-                    className=""
-                    submitStyle={
-                      'hover:scale-105 transition-all duration-500 w-full bg-[#24EEA0] h-12 rounded-full font-montserrat font-bold text-lg disabled:opacity-40'
-                    }
-                    btnSubmitLabel={'Salvar Alterações'}
-                    onSubmit={handleSave}
-                  />
-
-                  <FormUserPassword />
+                  <div className="flex-1 md:mt-[76px]">
+                    <FormUserPassword />
+                  </div>
                 </div>
               </div>
             </div>
@@ -184,15 +128,120 @@ function FormUser({ user, photoPath }) {
   );
 }
 
+const FormImage = forwardRef(({ photoPath, setAvatarPicImg }, ref) => {
+  const [imageSrc, setImageSrc] = useState(null);
+  const [croppedImage, setCroppedImage] = useState(null);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [cropAreaPixels, setCropAreaPixels] = useState(null);
+  const fileInputRef = useRef(null);
+
+  const onFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => setImageSrc(reader.result);
+    }
+  };
+
+  const onCropComplete = useCallback((_, croppedAreaPixels) => {
+    setCropAreaPixels(croppedAreaPixels);
+  }, []);
+
+  const applyCrop = async () => {
+    if (!imageSrc || !cropAreaPixels) return;
+
+    const image = document.createElement('img');
+    image.src = imageSrc;
+
+    await new Promise((resolve) => (image.onload = resolve));
+
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = cropAreaPixels.width;
+    canvas.height = cropAreaPixels.height;
+    ctx.drawImage(
+      image,
+      cropAreaPixels.x,
+      cropAreaPixels.y,
+      cropAreaPixels.width,
+      cropAreaPixels.height,
+      0,
+      0,
+      cropAreaPixels.width,
+      cropAreaPixels.height,
+    );
+
+    canvas.toBlob((blob) => {
+      if (blob) {
+        const file = new File([blob], 'cropped_image.jpg', { type: 'image/jpeg' });
+        setAvatarPicImg(file); // Set the cropped image file
+        setCroppedImage(URL.createObjectURL(blob));
+      }
+    }, 'image/jpeg');
+
+    setImageSrc(null);
+  };
+
+  return (
+    <div className="flex flex-col items-center">
+      <input
+        ref={fileInputRef}
+        onChange={onFileChange}
+        type="file"
+        accept="image/png, image/jpeg, image/jpg"
+        className="hidden"
+      />
+      {imageSrc ? (
+        <div className="relative w-72 h-72">
+          <Cropper
+            image={imageSrc}
+            crop={crop}
+            zoom={zoom}
+            aspect={1}
+            onCropChange={setCrop}
+            onZoomChange={setZoom}
+            onCropComplete={onCropComplete}
+          />
+          <button
+            onClick={applyCrop}
+            className="absolute px-4 py-2 text-white transform -translate-x-1/2 bg-blue-500 rounded-md bottom-2 left-1/2"
+          >
+            Confirmar
+          </button>
+        </div>
+      ) : (
+        <div className="relative mb-2 group" onClick={() => fileInputRef.current.click()}>
+          <Image
+            src={
+              croppedImage ||
+              photoPath ||
+              'https://img.freepik.com/free-vector/illustration-businessman_53876-5856.jpg?w=740' ||
+              '/placeholder.svg' ||
+              '/placeholder.svg'
+            }
+            alt="Avatar"
+            width={176}
+            height={176}
+            className="rounded-lg"
+          />
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50 rounded-lg opacity-0 group-hover:opacity-100">
+            <span className="px-4 py-2 text-sm font-semibold text-white bg-primary/40">
+              Escolher imagem
+            </span>
+          </div>
+        </div>
+      )}
+      <p className="font-semibold text-center">Foto de perfil</p>
+    </div>
+  );
+});
+
+FormImage.displayName = 'FormImage';
+
 function FormUserPassword() {
   const form = {
-    current_password: {
-      type: InputType.PASSWORD,
-      label: 'Senha atual',
-      labelStyle: 'font-semibold',
-      width: InputWidth.FULL,
-      validation: yup.string().required('Campo Obrigatório'),
-    },
     new_password: {
       type: InputType.PASSWORD,
       label: 'Nova senha',
@@ -217,8 +266,7 @@ function FormUserPassword() {
 
   const handleSubmit = (e) => {
     const formData = new FormData();
-    formData.append('new_password', e.new_password ?? '');
-    formData.append('current_password', e.current_password ?? '');
+    formData.append('password', e.new_password ?? '');
 
     api
       .put('/update_password', formData, {
@@ -227,7 +275,7 @@ function FormUserPassword() {
         },
       })
       .then((res) => {
-        if (res.status != 200) throw 'Status inexperado';
+        if (!String(res.status).startsWith('2')) throw 'Status inexperado';
         Notify.success('Senha atualizada com sucesso');
       })
       .catch((e) => {
@@ -238,7 +286,7 @@ function FormUserPassword() {
 
   return (
     <>
-      <div className="flex flex-col items-center justify-center w-11/12 mx-auto mt-10">
+      <div className="flex flex-col items-center justify-center max-w-2xl mx-auto mt-10">
         <div className="flex flex-col items-center justify-center w-full">
           <h2 className="text-3xl font-bold">Alterar senha</h2>
           <p className="mt-1 text-sm leading-6 text-gray-400">
@@ -246,7 +294,7 @@ function FormUserPassword() {
           </p>
         </div>
 
-        <div className="w-full max-w-2xl mt-6">
+        <div className="w-full mt-6">
           <FormBuilder
             form={form}
             cancel={false}
@@ -281,26 +329,47 @@ export default function ConfingNewAccount({ applicant }) {
   return (
     <CandidateHomeLayout applicant={applicant}>
       {user && <FormUser user={user} photoPath={applicant?.f_photo?.url} />}
-      {/* <FormUserPassword /> */}
     </CandidateHomeLayout>
   );
 }
 
-export async function getServerSideProps(context) {
-  const { req, query, res, asPath, pathname } = context;
-  if (req) {
-    let host = getHost(req);
-    let company_page_url;
-
-    const { partner_id, type } = await fetchCompanyIdByHost(host);
-    if (partner_id) {
-      const { base_domain, domain_prefix } = await fetchCompanyCustomization(partner_id);
-      company_page_url = `https://${domain_prefix}.${base_domain}`;
-    }
-
-    let applicant = await fetchApplicant(req);
-
-    return { props: { applicant: applicant?.f_photo?.url, company_page_url, type } };
+export async function getServerSideProps({ req }) {
+  const applicant = await fetchApplicant(req);
+  const redirectUrl = `?redirect=${encodeURIComponent(req.url)}`;
+  if (applicant == null) {
+    return {
+      redirect: {
+        destination: `/auth/signin${redirectUrl}`,
+        permanent: false,
+      },
+    };
   }
-  return { notFound: true };
+
+  if (applicant?.error) {
+    if (applicant.error === 'UserNotFoundException')
+      return {
+        redirect: {
+          destination: `/auth/signin${redirectUrl}`,
+          permanent: false,
+        },
+      };
+    return {
+      redirect: {
+        destination: `/auth/signup/confirm${redirectUrl}`,
+        permanent: false,
+      },
+    };
+  }
+
+  const { position_title, about, uploaded_resume } = applicant;
+  if (position_title === '' || about === '' || !uploaded_resume || !uploaded_resume.url) {
+    return {
+      redirect: {
+        destination: `/auth/signup/info${redirectUrl}`,
+        permanent: false,
+      },
+    };
+  }
+
+  return { props: { applicant } };
 }

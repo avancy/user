@@ -212,40 +212,60 @@ function JobDescription({ job, is_applied }) {
   );
 }
 
-export async function getServerSideProps(context) {
-  const { req, params } = context;
+export async function getServerSideProps({ req, params }) {
+  const applicant = await fetchApplicant(req);
+  const redirectUrl = `?redirect=${encodeURIComponent(req.url)}`;
+  const { slug } = params;
 
-  if (company_id) {
-    const { slug } = params;
-    const applicant = await fetchApplicant(req);
-
-    if (!applicant) {
-      return {
-        redirect: {
-          destination: `/jobs/${slug}`,
-        },
-      };
-    }
-
-    const job = await getJobDetails(slug);
-    if (!job) {
-      return {
-        notFound: true,
-      };
-    }
-
-    let is_applied = await isAppliedToJob(job?.id, applicant?.id);
-
+  if (applicant == null) {
     return {
-      props: {
-        job,
-        logo: f_logo,
-        is_applied: !!is_applied,
-        applicant,
-        primary_color,
-        secondary_color,
+      redirect: {
+        destination: `/auth/signin${redirectUrl}`,
+        permanent: false,
       },
     };
   }
-  return { notFound: true };
+  if (applicant?.error) {
+    if (applicant.error === 'UserNotFoundException')
+      return {
+        redirect: {
+          destination: `/auth/signin${redirectUrl}`,
+          permanent: false,
+        },
+      };
+    return {
+      redirect: {
+        destination: `/auth/signup/confirm${redirectUrl}`,
+        permanent: false,
+      },
+    };
+  }
+
+  const { position_title, about, uploaded_resume } = applicant;
+  if (position_title === '' || about === '' || !uploaded_resume || !uploaded_resume.url) {
+    return {
+      redirect: {
+        destination: `/auth/signup/info${redirectUrl}`,
+        permanent: false,
+      },
+    };
+  }
+
+  const job = await getJobDetails(slug);
+  if (!job) {
+    return { notFound: true };
+  }
+
+  const is_applied = await isAppliedToJob(job?.id, applicant?.id);
+
+  return {
+    props: {
+      job,
+      logo: f_logo,
+      is_applied: !!is_applied,
+      applicant,
+      primary_color,
+      secondary_color,
+    },
+  };
 }

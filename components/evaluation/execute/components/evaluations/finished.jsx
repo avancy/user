@@ -1,3 +1,3 @@
 export default function EvaluationFinished() {
-    return <div>TestFinished</div>
+  return <div>TestFinished</div>;
 }

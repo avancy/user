@@ -1,20 +1,23 @@
-import { fetchApplicant, getUser } from '@/lib/services/server_side_props';
 import { AuthLayout } from '@/components/layouts/auth';
-import Login from '@/components/views/auth/signin';
-import Head from 'next/head';
+import SignupLayout from '@/components/layouts/signup';
+import SignupInfoView from '@/components/views/auth/signup/info';
+import { fetchApplicant } from '@/lib/services/server_side_props';
 
-export default function Main() {
+export default function Main({ position_title, about, uploaded_resume }) {
   return (
-    <>
-      <Head>
-        <title>Login - Mavielo RH</title>
-      </Head>
-      <Login />
-    </>
+    <SignupInfoView
+      position_title={position_title}
+      about={about}
+      uploaded_resume={uploaded_resume}
+    />
   );
 }
 
-Main.getLayout = (page) => <AuthLayout>{page}</AuthLayout>;
+Main.getLayout = (page) => (
+  <AuthLayout>
+    <SignupLayout>{page}</SignupLayout>
+  </AuthLayout>
+);
 
 export async function getServerSideProps({ req, query }) {
   const { redirect } = query;
@@ -30,16 +33,21 @@ export async function getServerSideProps({ req, query }) {
         },
       };
     }
-
-    return { props: {} };
+    return {
+      redirect: {
+        destination: `/auth/signin${redirectUrl}`,
+        permanent: false,
+      },
+    };
   }
 
   const { position_title, about, uploaded_resume } = applicant;
   if (position_title === '' || about === '' || !uploaded_resume || !uploaded_resume.url) {
     return {
-      redirect: {
-        destination: `/auth/signup/info${redirectUrl}`,
-        permanent: false,
+      props: {
+        position_title,
+        about,
+        uploaded_resume,
       },
     };
   }

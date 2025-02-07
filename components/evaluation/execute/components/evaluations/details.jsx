@@ -1,3 +1,3 @@
 export default function EvaluationDetails() {
-  return <div>TestDetails</div>
+  return <div>TestDetails</div>;
 }

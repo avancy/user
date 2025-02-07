@@ -15,7 +15,7 @@ export default function DiscForms() {
     formStep,
     setFormStep,
     handleSave,
-    nextStep 
+    nextStep,
   } = useTestContext();
 
   const backFormStep = () => {

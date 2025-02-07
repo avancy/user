@@ -4,10 +4,9 @@ import { motion } from 'framer-motion';
 import { useRouter } from 'next/router';
 
 export default function DiscFinished() {
-    const router = useRouter();
-  const handleBackClick = () => {   
+  const router = useRouter();
+  const handleBackClick = () => {
     router.push('/evaluations');
-    console.log('Voltar para as outras avaliações');
   };
 
   return (

@@ -2,7 +2,7 @@ import { CheckCircleIcon, ExclamationCircleIcon } from '@heroicons/react/24/outl
 import CandidateHomeLayout from './dashboard/candidate_home_layout';
 import { useState, useEffect } from 'react';
 
-export default function DiscFinish({ disc, applicant }) {
+export default function DiscFinish({ disc, restartDisc = () => {}, applicant }) {
   const [daysLeft, setDaysLeft] = useState(0);
   const [canRedo, setCanRedo] = useState(false);
   const totalWords = 39;
@@ -51,7 +51,7 @@ export default function DiscFinish({ disc, applicant }) {
           {/* Verificação de Tempo Restante */}
           {canRedo ? (
             <button
-              onClick={() => console.log('refazer')}
+              onClick={restartDisc}
               className="w-full py-2 mt-4 font-bold text-white transition duration-300 bg-blue-600 rounded-lg hover:bg-blue-700"
             >
               Refazer DISC

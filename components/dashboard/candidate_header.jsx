@@ -1,6 +1,6 @@
 import { Menu, Popover, Transition } from '@headlessui/react';
 import { UserCircleIcon } from '@heroicons/react/20/solid';
-import MavieloLogo from '@/images/logos/mavielo.svg';
+import MavieloLogo from '@/public/images/logo.png';
 import { NAVIGATION } from './constrants';
 import { useRouter } from 'next/router';
 import { classNames } from '@/util/css';
@@ -13,6 +13,7 @@ import {
   BellIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
+import clsx from 'clsx';
 
 export function CandidateHeader({ user, signOut, openProfessionalProfile }) {
   const router = useRouter();
@@ -25,40 +26,41 @@ export function CandidateHeader({ user, signOut, openProfessionalProfile }) {
   const redirectTo = 'https://mavielorh.com.br';
 
   return (
-    <>
-      <header className="border-b-2 border-gray-100 xl:mx-32">
+    <div className="flex items-center justify-center w-full">
+      <header className="border-b-2 border-gray-100 py-2 xl:mx-32 sm:mx-6 w-full max-w-[1680px]">
         <div className="max-w-full sm:px-4 lg:px-8">
           <Popover className="flex justify-between h-16">
             <div className="flex px-2 lg:px-0">
               <div className="flex items-center flex-shrink-0">
                 <Link href={redirectTo} target="_blank" rel="noopener noreferrer">
-                  <Image priority src={MavieloLogo} alt="Logo MavieloRH" />
+                  <Image priority src={MavieloLogo} alt="Logo MavieloRH" className="w-auto h-11" />
                 </Link>
               </div>
-              <nav
-                aria-label="Global"
-                className="hidden lg:ml-16 lg:flex lg:items-center lg:space-x-20"
-              >
-                {NAVIGATION.HOME.map((item, index) => (
-                  <div key={index} className="relative">
-                    <Link
-                      href={item.href}
-                      className={classNames(
-                        'px-3 py-2 text-sm font-medium text-gray-900 rounded-md relative z-10',
-                        isRouteActive(item.href, router.pathname)
-                          ? 'text-gray-900'
-                          : 'text-gray-500',
-                      )}
-                    >
-                      {item.name}
-                    </Link>
-                    {isRouteActive(item.href, router.pathname) && (
-                      <span className="absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-brand-primary-100 to-brand-secondary-500 rounded-md" />
-                    )}
-                  </div>
-                ))}
-              </nav>
             </div>
+            <nav
+              aria-label="Global"
+              className="hidden lg:ml-16 lg:flex lg:items-center lg:gap-x-10"
+            >
+              {NAVIGATION.HOME.map((item, index) => (
+                <div key={index} className="relative group">
+                  <Link
+                    href={item.href}
+                    className={classNames(
+                      'px-3 py-2 text-sm font-medium text-gray-900 rounded-md relative z-10',
+                      isRouteActive(item.href, router.pathname) ? 'text-gray-900' : 'text-gray-500',
+                    )}
+                  >
+                    {item.name}
+                  </Link>
+                  <span
+                    className={clsx(
+                      'absolute bottom-0 left-0 w-full h-[3px] group-hover:max-w-full rounded-full transition-all duration-300 bg-gradient-to-r from-brand-primary-100 to-brand-secondary-500 rounded-md',
+                      isRouteActive(item.href, router.pathname) ? '' : 'max-w-0',
+                    )}
+                  />
+                </div>
+              ))}
+            </nav>
             {/* <div className="flex items-center justify-center flex-1 px-2 lg:ml-6 lg:justify-end">
               <div className="max-w-lg lg:max-w-xs">
                 <BtnBase
@@ -112,11 +114,14 @@ export function CandidateHeader({ user, signOut, openProfessionalProfile }) {
                     <div className="bg-white divide-y divide-gray-200 rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
                       <div className="pt-3 pb-2">
                         <div className="flex items-center justify-between px-4">
-                          <div>
-                            <Link href={redirectTo}>
-                              <Image priority src={MavieloLogo} alt="Logo MavieloRH" />
-                            </Link>
-                          </div>
+                          <Link href={redirectTo} className="h-full mx-auto">
+                            <Image
+                              priority
+                              src={MavieloLogo}
+                              alt="Logo MavieloRH"
+                              className="w-auto mx-auto h-11"
+                            />
+                          </Link>
                           <div className="-mr-2">
                             <Popover.Button className="inline-flex items-center justify-center p-2 text-gray-400 bg-white rounded-md hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500">
                               <span className="sr-only">Close menu</span>
@@ -220,7 +225,7 @@ export function CandidateHeader({ user, signOut, openProfessionalProfile }) {
                 </Transition.Child>
               </div>
             </Transition.Root>
-            <div className="hidden gap-20 lg:ml-4 lg:flex lg:items-center">
+            <div className="hidden gap-10 lg:ml-4 lg:flex lg:items-center w-[228px]">
               <button
                 type="button"
                 className="flex-shrink-0 p-1 text-gray-400 transition-all duration-300 bg-white rounded-full hover:scale-90 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
@@ -327,6 +332,6 @@ export function CandidateHeader({ user, signOut, openProfessionalProfile }) {
           </Popover>
         </div>
       </header>
-    </>
+    </div>
   );
 }

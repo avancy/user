@@ -70,6 +70,7 @@ export function ProfessionalProfileResumePDF({ getUserUpdate }) {
           >
             Upload de novo currículo
           </label>
+          <p className="mt-1 text-sm text-gray-500 sm:mt-0">Máx. 10MB</p>
         </div>
         <div className="sm:col-span-2">
           <MyDropzone

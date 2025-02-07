@@ -1,7 +1,7 @@
 import SignupBanner from '@/public/svgs/banners/signup_banner.svg';
 import LogoGreen from '@/public/images/logo_green.svg';
-import AuthHeader from './header';
 import Image from 'next/image';
+import AuthHeader from '../auth/header';
 
 export function AuthLayout({ children }) {
   return (
