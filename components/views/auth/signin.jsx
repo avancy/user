@@ -103,7 +103,10 @@ export default function Login() {
     setIsLoading(false);
   };
 
-  const handleForgot = () => router.push(`/auth/forgot${redirectUrl}`);
+  const handleForgot = () =>
+    router.push(`/auth/forgot${redirectUrl}`, undefined, { shallow: true });
+  const handleRegister = () =>
+    router.push(`/auth/signup${redirectUrl}`, undefined, { shallow: true });
 
   return (
     <>
@@ -154,13 +157,13 @@ export default function Login() {
         <div className="flex items-center justify-center pt-4 text-base font-helvetica">
           <p>
             Já tem uma conta?{' '}
-            <Link
-              href={`/auth/signup${redirectUrl}`}
+            <button
+              onClick={handleRegister}
               className="text-transparent bg-gradient-to-r from-brand-primary-100 to-brand-secondary-500 bg-clip-text"
             >
               {' '}
               Cadastre-se
-            </Link>
+            </button>
           </p>
         </div>
       </div>
