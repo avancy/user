@@ -80,7 +80,12 @@ export class MyDropzone extends React.Component {
                     <div className="flex text-sm text-gray-600">
                       <input {...getInputProps()} />
                     </div>
-                    <p className={`${this.props.labelStyle ? this.props.labelStyle : "pl-1"}`} onClick={() => this.openDialog()}>{this.props.label1}</p>
+                    <p
+                      className={`${this.props.labelStyle ? this.props.labelStyle : 'pl-1'}`}
+                      onClick={() => this.openDialog()}
+                    >
+                      {this.props.label1}
+                    </p>
                     <p className="text-xs text-gray-500"> {this.props.label2} </p>
                   </div>
                 </div>
@@ -91,7 +96,7 @@ export class MyDropzone extends React.Component {
                       <FileRow
                         file={file}
                         key={file.path}
-                        onSave={() => { }}
+                        onSave={() => {}}
                         onDelete={() => this.onDelete(index)}
                         url={this.props.url}
                         onComplete={(response) => this.onComplete(response)}

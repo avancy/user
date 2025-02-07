@@ -40,7 +40,7 @@ export default function Keyword({ name, description, select = false, classNames,
 
       {/* Render para telas pequenas */}
       <div className="relative flex items-center gap-2 md:hidden">
-        <span className={clsx("py-1", description ? 'pl-4 pr-0': 'px-4')}>{name}</span>
+        <span className={clsx('py-1', description ? 'pl-4 pr-0' : 'px-4')}>{name}</span>
         {description && (
           <>
             <button

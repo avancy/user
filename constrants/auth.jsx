@@ -1,6 +1,6 @@
 export const AUTH_ERROR_MESSAGES = {
   UserNotFoundException: 'Usuário não encontrado. Verifique o e-mail digitado.',
-  NotAuthorizedException: 'Usuário não autorizado. Verifique suas credenciais.',
+  NotAuthorizedException: 'Email e/ou senha incorretos',
   UserNotConfirmedException: 'Usuário não confirmado. Verifique seu e-mail para ativar a conta.',
   UsernameExistsException: 'Este e-mail já está registrado. Tente outro ou faça login.',
   InvalidParameterException: 'Parâmetros inválidos. Verifique os dados fornecidos.',
@@ -19,6 +19,7 @@ export const AUTH_ERROR_MESSAGES = {
   InvalidSecurityTokenException: 'Token de segurança inválido. Refaça o processo de autenticação.',
   MFAMethodNotFoundException: 'Método de autenticação multifator não encontrado.',
   InternalErrorException: 'Erro interno no servidor. Tente novamente mais tarde.',
+  UserLambdaValidationException: 'Senha ou e-mail inválidos.',
   null: 'Erro desconhecido. Tente novamente mais tarde.',
   undefined: 'Erro desconhecido. Tente novamente mais tarde.',
 };

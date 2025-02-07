@@ -7,9 +7,9 @@ import { LoadingText } from '@/components/common/loadding/text';
 import DiscFinish from '@/components/disc_finish';
 
 export default function TempExecuteDisc({ applicant }) {
-  const [disc, setDisc] = useState([]);
+  const [disc, setDisc] = useState(null);
   const [hasDoneDiscBefore, setHasDoneDiscBefore] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const handleSave = async (data) => {
     const req = {
       name: 'disc',
@@ -27,7 +27,6 @@ export default function TempExecuteDisc({ applicant }) {
     setIsLoading(true);
     try {
       const response = await api.get('/assessment/disc');
-      console.log(response.data);
       if (response.data) {
         setHasDoneDiscBefore(true);
         const updatedAt = new Date(response.data.updated_at);
@@ -45,8 +44,11 @@ export default function TempExecuteDisc({ applicant }) {
         setDisc(null);
       }
     } catch (err) {
+      if (err.request.status === 404) return;
+
       Notify.error('Erro ao buscar dados de DISC, tente novamente mais tarde');
-      console.error('Erro ao buscar dados de DISC:', err);
+      console.error(err);
+      setDisc(null);
     } finally {
       setIsLoading(false);
     }
@@ -65,7 +67,7 @@ export default function TempExecuteDisc({ applicant }) {
   }
 
   if (disc !== null) {
-    return <DiscFinish applicant={applicant} disc={disc} />;
+    return <DiscFinish applicant={applicant} disc={disc} restartDisc={() => setDisc(null)} />;
   }
 
   return (

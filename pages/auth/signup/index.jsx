@@ -1,20 +1,17 @@
-import { fetchApplicant } from '@/lib/services/server_side_props';
 import { AuthLayout } from '@/components/layouts/auth';
-import Forgot from '@/components/views/auth/forgot';
-import Head from 'next/head';
+import SignupLayout from '@/components/layouts/signup';
+import SignupIndexView from '@/components/views/auth/signup/index';
+import { fetchApplicant } from '@/lib/services/server_side_props';
 
 export default function Main() {
-  return (
-    <>
-      <Head>
-        <title>Validação de E-mail - Mavielo RH</title>
-      </Head>
-      <Forgot />
-    </>
-  );
+  return <SignupIndexView />;
 }
 
-Main.getLayout = (page) => <AuthLayout>{page}</AuthLayout>;
+Main.getLayout = (page) => (
+  <AuthLayout>
+    <SignupLayout>{page}</SignupLayout>
+  </AuthLayout>
+);
 
 export async function getServerSideProps({ req, query }) {
   const { redirect } = query;

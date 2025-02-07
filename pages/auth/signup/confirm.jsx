@@ -1,37 +1,32 @@
+import SignupValidateCodeView from '@/components/views/auth/signup/confirm';
 import { fetchApplicant } from '@/lib/services/server_side_props';
 import { AuthLayout } from '@/components/layouts/auth';
-import Forgot from '@/components/views/auth/forgot';
-import Head from 'next/head';
+import SignupLayout from '@/components/layouts/signup';
 
 export default function Main() {
-  return (
-    <>
-      <Head>
-        <title>Validação de E-mail - Mavielo RH</title>
-      </Head>
-      <Forgot />
-    </>
-  );
+  return <SignupValidateCodeView />;
 }
 
-Main.getLayout = (page) => <AuthLayout>{page}</AuthLayout>;
+Main.getLayout = (page) => (
+  <AuthLayout>
+    <SignupLayout>{page}</SignupLayout>
+  </AuthLayout>
+);
 
 export async function getServerSideProps({ req, query }) {
   const { redirect } = query;
-  const redirectUrl = redirect ? encodeURIComponent(`?redirect=${redirect}`) : '';
+  const redirectUrl = redirect ? `?redirect=${encodeURIComponent(redirect)}` : '';
   const applicant = await fetchApplicant(req);
-
   if (applicant?.error) {
-    if (applicant.error === 'EmailNotVerifiedException') {
-      return {
-        redirect: {
-          destination: `/auth/signup/confirm${redirectUrl}`,
-          permanent: false,
-        },
-      };
-    }
-
+    // if (applicant.error === 'EmailNotVerifiedException')
     return { props: {} };
+
+    // return {
+    //   redirect: {
+    //     destination: `/auth/signin${redirectUrl}`,
+    //     permanent: false,
+    //   },
+    // };
   }
 
   const { position_title, about, uploaded_resume } = applicant;

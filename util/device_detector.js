@@ -37,7 +37,7 @@ const getDeviceType = () => {
     }
   } else {
     if (width < 1800 && height < 1080) {
-      return "laptop"
+      return 'laptop';
     }
   }
 

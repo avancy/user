@@ -5,6 +5,7 @@ import Modal from '@/components/common/modal';
 import { Amplify } from 'aws-amplify';
 import config from '../aws-exports';
 import '../styles/globals.css';
+import { DataTransferProvider } from '@/contexts/data_transfer';
 
 if (process.env.NODE_ENV === 'development') {
   Amplify.configure({
@@ -50,10 +51,12 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <Authenticator.Provider>
-        <Notify />
-        <Modal />
-        <Alert />
-        {getLayout(<Component {...pageProps} />)}
+        <DataTransferProvider>
+          <Notify />
+          <Modal />
+          <Alert />
+          {getLayout(<Component {...pageProps} />)}
+        </DataTransferProvider>
       </Authenticator.Provider>
     </>
   );

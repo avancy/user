@@ -1,11 +1,8 @@
 import { LinkIcon, ChevronDownIcon } from '@heroicons/react/20/solid';
-import { Transition } from '@headlessui/react';
-import Evaluation from '.';
 import { classNames } from '@/util/css';
+import Evaluation from '.';
 
 export function GroupEvaluation({ groupEvaluation, job, open, setOpen }) {
-  {console.log(groupEvaluation)}
-
   return (
     <div className="p-6 border-b border-gray-200">
       <div className="flex items-center justify-between">
