@@ -1,8 +1,9 @@
 import Image from 'next/image';
+import clsx from 'clsx';
 
-export default function DiscImage() {
+export default function DiscImage({ className }) {
   return (
-    <div className="relative justify-center hidden mt-2 p r-10 xl:flex">
+    <div className={clsx('relative justify-center hidden mt-2 r-10 xl:flex', className)}>
       <Image
         src="/images/disc.png"
         alt="disc"

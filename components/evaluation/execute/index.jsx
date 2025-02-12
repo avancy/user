@@ -7,7 +7,7 @@ export default function EvaluationExecute({
   onClose = () => {},
   onSave = () => {},
   applicant,
-  values,
+  questions,
 }) {
   const Root = () => {
     const { step } = useTestContext();
@@ -16,7 +16,7 @@ export default function EvaluationExecute({
   };
 
   return (
-    <EvaluationProvider values={values} onClose={onClose} onSave={onSave}>
+    <EvaluationProvider values={questions} onClose={onClose} onSave={onSave}>
       <Root />
     </EvaluationProvider>
   );

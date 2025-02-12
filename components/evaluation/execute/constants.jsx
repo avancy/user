@@ -16,7 +16,7 @@ export const INTERNSHIPS_TYPES = {
 
 export const EVALUATIONS_TYPES = {
   DISC: 'disc',
-  JOB: 'test',
+  JOB: 'form',
 };
 
 export const INTERNSHIPS_TYPES_LIST = [
