@@ -71,7 +71,7 @@ export default function ProposalForm() {
     <Transition.Root show={isProposalMenuOpen && proposalStep >= 1} as={Fragment}>
       <Dialog
         as="div"
-        className="relative z-20"
+        className="relative z-50"
         onClose={() => !isAlertOpen && toggleProposalMenu()}
       >
         <div className="fixed inset-0 overflow-hidden bg-black/60">
