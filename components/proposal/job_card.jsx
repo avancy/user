@@ -2,7 +2,7 @@ import { classNames } from '@/util/css';
 import { useProposalContext } from '../../contexts/proposal';
 import { useRouter } from 'next/router';
 
-export default function JobCard({ job, job_proposal, stage, required_disc = false }) {
+export default function JobCard({ job, job_proposal, stage, required_disc = false, isDisqualified }) {
   const { toggleProposalMenu, updateProposal } = useProposalContext();
   const router = useRouter();
 
@@ -20,15 +20,15 @@ export default function JobCard({ job, job_proposal, stage, required_disc = fals
     router.push(job.url);
   };
 
-  console.log(job?.company_name);
+  console.log(job.visible);
 
   return (
     <div
       key={job?.id}
       className={classNames(
         'ring-1 ring-gray-200 flex-1 p-6 xl:pt-[22px] rounded-[14px] bg-white shadow-sm shadow-gray-600/30',
-        'h-[320px] md:h-[240px] flex flex-col justify-between',
-        job?.archived ? 'opacity-40 pointer-events-none' : '',
+        'h-[320px] md:h-[284px] flex flex-col justify-between',
+        job?.archived || !job?.visible ? 'opacity-40 pointer-events-none' : '',
       )}
     >
       <div>
@@ -80,7 +80,7 @@ export default function JobCard({ job, job_proposal, stage, required_disc = fals
                   : handleProposal
               : handleDetail
           }
-          disabled={job?.archived}
+          disabled={job?.archived || job?.isDisqualified || !job?.visible}
           className={classNames(
             'w-full p-2 my-3 font-bold transition-all duration-300 rounded-full',
             job_proposal?.expiration_date && false // new Date(job_proposal?.expiration_date) < new Date()
@@ -102,6 +102,10 @@ export default function JobCard({ job, job_proposal, stage, required_disc = fals
           )}
         </button>
       )}
+      
+      <div className='flex w-full justify-end py-2'>
+        <p>Etapa: <span className='font-bold'>{stage}</span></p>
+      </div>
     </div>
   );
 }
