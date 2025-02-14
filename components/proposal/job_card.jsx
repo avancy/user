@@ -20,12 +20,14 @@ export default function JobCard({ job, job_proposal, stage, required_disc = fals
     router.push(job.url);
   };
 
+  console.log(job?.company_name);
+
   return (
     <div
       key={job?.id}
       className={classNames(
         'ring-1 ring-gray-200 flex-1 p-6 xl:pt-[22px] rounded-[14px] bg-white shadow-sm shadow-gray-600/30',
-        'h-[320px] md:h-[212px] flex flex-col justify-between',
+        'h-[320px] md:h-[240px] flex flex-col justify-between',
         job?.archived ? 'opacity-40 pointer-events-none' : '',
       )}
     >
@@ -48,9 +50,15 @@ export default function JobCard({ job, job_proposal, stage, required_disc = fals
             </abbr>
           </h3>
 
-          <span className="w-full">
-            {job?.city?.name} - {job?.city?.state?.name}
-          </span>
+          <div className="w-full flex flex-col">
+            <span className="w-full font-semibold">
+              {job?.company_name}
+            </span>
+
+            <span className="w-full">
+              {job?.city?.name} - {job?.city?.state?.name}
+            </span>
+          </div>
         </div>
       </div>
       {required_disc ? (
