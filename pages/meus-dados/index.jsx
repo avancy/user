@@ -137,8 +137,6 @@ const FormImage = forwardRef(({ photoPath, setAvatarPicImg }, ref) => {
   const [cropAreaPixels, setCropAreaPixels] = useState(null);
   const fileInputRef = useRef(null);
 
-  photoPath = null
-
   const onFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
