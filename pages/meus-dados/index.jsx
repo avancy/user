@@ -12,6 +12,7 @@ import { api } from '@/lib/api';
 import * as yup from 'yup';
 import Cropper from 'react-easy-crop';
 import Image from 'next/image';
+import { UserCircleIcon } from '@heroicons/react/24/outline';
 
 function FormUser({ user, photoPath }) {
   const inputRef = useRef(null);
@@ -213,19 +214,24 @@ const FormImage = forwardRef(({ photoPath, setAvatarPicImg }, ref) => {
         </div>
       ) : (
         <div className="relative mb-2 group" onClick={() => fileInputRef.current.click()}>
-          <Image
-            src={
-              croppedImage ||
-              photoPath ||
-              'https://img.freepik.com/free-vector/illustration-businessman_53876-5856.jpg?w=740' ||
-              '/placeholder.svg' ||
-              '/placeholder.svg'
-            }
-            alt="Avatar"
-            width={176}
-            height={176}
-            className="rounded-lg"
-          />
+          {croppedImage || photoPath ? (
+            <Image
+              src={
+                croppedImage ||
+                photoPath ||
+                'https://img.freepik.com/free-vector/illustration-businessman_53876-5856.jpg?w=740' ||
+                '/placeholder.svg' ||
+                '/placeholder.svg'
+              }
+              alt="Avatar"
+              width={176}
+              height={176}
+              className="rounded-lg"
+            />
+          ) : (
+            <UserCircleIcon className="w-[176px] h-[176px] text-sm rounded-lg text-gray-500 " />
+          )}
+
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50 rounded-lg opacity-0 group-hover:opacity-100">
             <span className="px-4 py-2 text-sm font-semibold text-white bg-primary/40">
               Escolher imagem

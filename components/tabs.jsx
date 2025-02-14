@@ -43,7 +43,7 @@ export function Tabs({ tabs, onSelect, children }) {
       </div>
       <div className="hidden sm:block">
         <div className="border-b border-gray-200">
-          <nav className="flex ml-6 -mb-px space-x-8" aria-label="Tabs">
+          <nav className="flex flex-col ml-6 -mb-px" aria-label="Tabs">
             {_tabs.map((tab, i) => (
               <button
                 key={tab.name}
@@ -64,7 +64,9 @@ export function Tabs({ tabs, onSelect, children }) {
                   )}
                   aria-hidden="true"
                 />
-                <span>{tab.name}</span>
+                <span>{tab.name}</span> {tab.name === "Currículo Preenchido" && (
+                  <span className='ml-1 text-xs'>{"(opcional)"}</span>
+                )}
               </button>
             ))}
           </nav>

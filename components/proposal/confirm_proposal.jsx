@@ -23,7 +23,7 @@ export function ConfirmProposal({ applicant }) {
 
   return (
     <Transition.Root show={isProposalMenuOpen && proposalStep === 0} as={Fragment}>
-      <Dialog as="div" className="relative z-20" onClose={toggleProposalMenu}>
+      <Dialog as="div" className="relative z-50" onClose={toggleProposalMenu}>
         <div className="fixed inset-0" />
 
         <div className="fixed inset-0 overflow-hidden bg-black/60">
@@ -38,7 +38,7 @@ export function ConfirmProposal({ applicant }) {
                 leaveFrom="translate-x-0"
                 leaveTo="translate-x-full"
               >
-                <Dialog.Panel className="relative flex flex-col w-screen h-screen max-w-6xl gap-10 p-10 bg-white pointer-events-auto">
+                <Dialog.Panel className="relative z-20 flex flex-col w-screen h-screen max-w-6xl gap-10 p-10 bg-white pointer-events-auto">
                   {loading && (
                     <div className="absolute inset-0 z-50 flex items-center justify-center bg-white pointer-events-none opacity-60">
                       <Spinner className="w-10 h-10 animate-spin" />
