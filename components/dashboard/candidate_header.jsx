@@ -14,6 +14,7 @@ import {
   XMarkIcon,
 } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
+import { Notify } from '../common/notification';
 
 export function CandidateHeader({ user, signOut, openProfessionalProfile }) {
   const router = useRouter();
@@ -163,6 +164,7 @@ export function CandidateHeader({ user, signOut, openProfessionalProfile }) {
                           <div>
                             <button
                               type="button"
+                              onClick={() => Notify.warning("Não existe nenhuma conversa no momento.")}
                               className={
                                 'block text-left px-3 w-full py-2 text-base font-medium text-gray-900 rounded-md hover:bg-gray-100 hover:text-gray-800'
                               }
@@ -172,6 +174,7 @@ export function CandidateHeader({ user, signOut, openProfessionalProfile }) {
                             </button>
                             <button
                               type="button"
+                              onClick={() => Notify.warning("A caixa de notificações está vazia.")}
                               className="block w-full px-3 py-2 text-base font-medium text-left text-gray-900 rounded-md hover:bg-gray-100 hover:text-gray-800"
                             >
                               <span className="sr-only">View notifications</span>
@@ -226,21 +229,33 @@ export function CandidateHeader({ user, signOut, openProfessionalProfile }) {
               </div>
             </Transition.Root>
             <div className="hidden gap-10 lg:ml-4 lg:flex lg:items-center w-[228px]">
-              <button
-                type="button"
-                className="flex-shrink-0 p-1 text-gray-400 transition-all duration-300 bg-white rounded-full hover:scale-90 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-              >
-                <span className="sr-only">View notifications</span>
-                <ChatBubbleOvalLeftEllipsisIcon className="w-6 h-6" aria-hidden="true" />
-              </button>
+              <Popover className="relative">
+                <Popover.Button className="flex-shrink-0 p-1 text-gray-400 transition-all duration-300 bg-white rounded-full hover:scale-90 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                  <span className="sr-only">View notifications</span>
+                  <ChatBubbleOvalLeftEllipsisIcon className="w-6 h-6" aria-hidden="true" />
+                </Popover.Button>
 
-              <button
-                type="button"
-                className="flex-shrink-0 p-1 text-gray-400 transition-all duration-300 bg-white rounded-full hover:scale-90 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-              >
-                <span className="sr-only">View notifications</span>
-                <BellIcon className="w-6 h-6" aria-hidden="true" />
-              </button>
+                <Popover.Panel className="absolute z-20 bg-white w-80 text-xs h-64 right-0 top-8">
+                  <div className="h-full w-full flex items-center justify-center p-4 rounded-md shadow-lg">
+                    <p>Não existe nenhuma conversa no momento.</p>
+                  </div>
+                </Popover.Panel>
+              </Popover>
+
+              <Popover className="relative">
+                <Popover.Button
+                  className="flex-shrink-0 p-1 text-gray-400 transition-all duration-300 bg-white rounded-full hover:scale-90 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                >
+                  <span className="sr-only">View notifications</span>
+                  <BellIcon className="w-6 h-6" aria-hidden="true" />
+                </Popover.Button>
+
+                <Popover.Panel className="absolute z-20 bg-white w-80 text-xs h-64 right-0 top-8">
+                  <div className="h-full w-full flex items-center justify-center p-4 rounded-md shadow-lg">
+                    <p>A caixa de notificações está vazia.</p>
+                  </div>
+                </Popover.Panel>
+              </Popover>
 
               {/* Profile dropdown */}
               <Menu as="div" className="relative z-50 flex-shrink-0 ml-4 font-helvetica">
