@@ -22,9 +22,9 @@ export default function ApplicationsView({ applicant }) {
   const router = useRouter();
 
   const publishedJobs =
-    applications?.filter((application) => application.job.published && !application.job.archived && application.job.visible) ||
+    applications?.filter((application) => application.job.published && !application.job.archived && !application.disqualified) ||
     [];
-  const archivedJobs = applications?.filter((application) => application.job.archived || !application.job.visible);
+  const archivedJobs = applications?.filter((application) => application.job.archived || application.disqualified);
 
   useEffect(() => {
     checkInviteExpiration(router.query, setIsLinkExpired);
