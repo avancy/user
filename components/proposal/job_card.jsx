@@ -6,6 +6,8 @@ export default function JobCard({ job, job_proposal, stage, required_disc = fals
   const { toggleProposalMenu, updateProposal } = useProposalContext();
   const router = useRouter();
 
+  // const job_url = process.env.NODE_ENV === 'development' ? `http://localhost:3001/jobs/${job.slug}` : job.url;
+  
   const handleProposal = () => {
     toggleProposalMenu();
     updateProposal({
