@@ -82,7 +82,12 @@ export default function SignupInfoView({ position_title, about, uploaded_resume,
         },
       });
     }
-    await api.put('/resume/photo', formDataImage);
+
+    try {
+      await api.put('/resume/photo', formDataImage);
+    } catch (e) {
+      Notify.error('Não foi possível inserir a foto de perfil.');
+    }
 
     try {
       await axios.post('/api/applicant/profile-resume', formDataPdf, {
