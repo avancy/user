@@ -10,8 +10,8 @@ export function LoadingText() {
       <Image
         src={small_gif_path}
         unoptimized={true}
-        width={100}
-        height={100}
+        width={50}
+        height={50}
         className="lg:hidden"
         alt="Carregando..."
       />
@@ -19,8 +19,8 @@ export function LoadingText() {
       <Image
         src={big_gif_path}
         unoptimized={true}
-        width={400}
-        height={400}
+        width={200}
+        height={200}
         className="hidden lg:block"
         alt="Carregando..."
       />

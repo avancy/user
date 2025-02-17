@@ -129,7 +129,7 @@ function FormUser({ user, photoPath }) {
   );
 }
 
-const FormImage = forwardRef(({ photoPath, setAvatarPicImg }, ref) => {
+export const FormImage = forwardRef(({ photoPath, setAvatarPicImg }, ref) => {
   const [imageSrc, setImageSrc] = useState(null);
   const [croppedImage, setCroppedImage] = useState(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });

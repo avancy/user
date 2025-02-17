@@ -25,9 +25,18 @@ export function Tabs({ tabs, onSelect, children }) {
             id="tabs"
             name="tabs"
             className="block w-full border-gray-300 rounded-md focus:border-brand-primary-100 focus:ring-brand-primary-200"
-            value={_tabs[selectedTab].name}
+            value={
+              _tabs[selectedTab].name === 'Currículo Preenchido'
+                ? 'Currículo Preenchido (opcional)'
+                : _tabs[selectedTab].name
+            }
             onChange={(e) => {
-              const index = _tabs.findIndex((tab) => tab.name === e.target.value);
+              const normalized_name =
+                e.target.value === 'Currículo Preenchido (opcional)'
+                  ? 'Currículo Preenchido'
+                  : e.target.value;
+              const index = _tabs.findIndex((tab) => tab.name === normalized_name);
+              console.log(index);
               if (index !== -1) {
                 selectTab(index);
               }
@@ -35,7 +44,7 @@ export function Tabs({ tabs, onSelect, children }) {
           >
             {_tabs.map((tab, i) => (
               <option onClick={() => selectTab(i)} className="max-w-full" key={tab.name}>
-                {tab.name}
+                {tab.name === 'Currículo Preenchido' ? 'Currículo Preenchido (opcional)' : tab.name}
               </option>
             ))}
           </select>
@@ -64,8 +73,9 @@ export function Tabs({ tabs, onSelect, children }) {
                   )}
                   aria-hidden="true"
                 />
-                <span>{tab.name}</span> {tab.name === "Currículo Preenchido" && (
-                  <span className='ml-1 text-xs'>{"(opcional)"}</span>
+                <span>{tab.name}</span>{' '}
+                {tab.name === 'Currículo Preenchido' && (
+                  <span className="ml-1 text-xs">{'(opcional)'}</span>
                 )}
               </button>
             ))}

@@ -2,11 +2,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import Dropzone from 'react-dropzone';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as yup from 'yup';
 import axios from 'axios';
 import FileIcon from '@/images/icons/FileIcon';
 import { Notify } from '@/components/common/notification';
+import { FormImage } from '@/pages/meus-dados';
+import { api } from '@/lib/api';
 
 const SchemaStepThree = yup.object({
   about: yup.string().required('Esse campo não pode ficar em branco'),
@@ -14,8 +16,10 @@ const SchemaStepThree = yup.object({
   resume: yup.mixed().required('O currículo é obrigatório'),
 });
 
-export default function SignupInfoView({ position_title, about, uploaded_resume }) {
+export default function SignupInfoView({ position_title, about, uploaded_resume, photo_path }) {
   const [fileName, setFileName] = useState('');
+  const inputRef = useRef(null);
+  const [avatarPicImg, setAvatarPicImg] = useState(null);
   const [mobileFile, setMobileFile] = useState(null);
   const router = useRouter();
   const { redirect } = router.query;
@@ -68,6 +72,17 @@ export default function SignupInfoView({ position_title, about, uploaded_resume 
     }
 
     await axios.post('/api/applicant/profile-about', { position_title, about });
+
+    const formDataImage = new FormData();
+    if (avatarPicImg) {
+      console.log(avatarPicImg)
+      formDataImage.append('file', avatarPicImg, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+    }
+    await api.put('/resume/photo', formDataImage);
 
     try {
       await axios.post('/api/applicant/profile-resume', formDataPdf, {
@@ -184,6 +199,8 @@ export default function SignupInfoView({ position_title, about, uploaded_resume 
 
           <p className="h-5 text-xs text-red-600">{errors.resume?.message}</p>
         </div>
+
+        <FormImage ref={inputRef} photoPath={photo_path} setAvatarPicImg={setAvatarPicImg} />
 
         <button className="hover:scale-110 transition-all duration-500 mt-4 bg-[#24EEA0] h-12 rounded-full font-bold text-base mb-10">
           Finalizar Cadastro
