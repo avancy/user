@@ -75,14 +75,19 @@ export default function SignupInfoView({ position_title, about, uploaded_resume,
 
     const formDataImage = new FormData();
     if (avatarPicImg) {
-      console.log(avatarPicImg)
+      console.log(avatarPicImg);
       formDataImage.append('file', avatarPicImg, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
     }
-    await api.put('/resume/photo', formDataImage);
+
+    try {
+      await api.put('/resume/photo', formDataImage);
+    } catch (e) {
+      Notify.error('Não foi possível inserir a foto de perfil.');
+    }
 
     try {
       await axios.post('/api/applicant/profile-resume', formDataPdf, {
@@ -102,14 +107,18 @@ export default function SignupInfoView({ position_title, about, uploaded_resume,
         url: uploaded_resume.url,
         method: 'GET',
         responseType: 'blob',
-      }).then((response) => {
-        const file = new File([response.data], uploaded_resume.name, {
-          type: 'application/pdf',
-        });
+      })
+        .then((response) => {
+          const file = new File([response.data], uploaded_resume.name, {
+            type: 'application/pdf',
+          });
 
-        setValue('resume', file);
-        setFileName(uploaded_resume.key);
-      });
+          setValue('resume', file);
+          setFileName(uploaded_resume.key);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     }
   }, [uploaded_resume]);
 
@@ -142,7 +151,7 @@ export default function SignupInfoView({ position_title, about, uploaded_resume,
 
         <div>
           <label className="text-base font-semibold" htmlFor="about">
-            Sobre Você:
+            Sobre Você: <span className="text-red-600">*</span>
           </label>
           <textarea
             {...register('about')}
@@ -200,7 +209,16 @@ export default function SignupInfoView({ position_title, about, uploaded_resume,
           <p className="h-5 text-xs text-red-600">{errors.resume?.message}</p>
         </div>
 
-        <FormImage ref={inputRef} photoPath={photo_path} setAvatarPicImg={setAvatarPicImg} />
+        <div>
+          <p className="text-xs text-red-600">* - Os campos são obrigatórios.</p>
+        </div>
+
+        <FormImage
+          ref={inputRef}
+          photoPath={photo_path}
+          setAvatarPicImg={setAvatarPicImg}
+          labelTitle="Foto de Perfil (opcional)"
+        />
 
         <button className="hover:scale-110 transition-all duration-500 mt-4 bg-[#24EEA0] h-12 rounded-full font-bold text-base mb-10">
           Finalizar Cadastro

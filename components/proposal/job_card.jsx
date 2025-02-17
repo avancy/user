@@ -6,6 +6,8 @@ export default function JobCard({ job, job_proposal, stage, required_disc = fals
   const { toggleProposalMenu, updateProposal } = useProposalContext();
   const router = useRouter();
 
+  // const job_url = process.env.NODE_ENV === 'development' ? `http://localhost:3001/jobs/${job.slug}` : job.url;
+  
   const handleProposal = () => {
     toggleProposalMenu();
     updateProposal({
@@ -20,15 +22,13 @@ export default function JobCard({ job, job_proposal, stage, required_disc = fals
     router.push(job.url);
   };
 
-  console.log(job.visible);
-
   return (
     <div
       key={job?.id}
       className={classNames(
         'ring-1 ring-gray-200 flex-1 p-6 xl:pt-[22px] rounded-[14px] bg-white shadow-sm shadow-gray-600/30',
         'h-[320px] md:h-[284px] flex flex-col justify-between',
-        job?.archived || !job?.visible ? 'opacity-40 pointer-events-none' : '',
+        job?.archived || isDisqualified || job_proposal?.status === 'completed' ? 'opacity-40 pointer-events-none' : '',
       )}
     >
       <div>
@@ -74,13 +74,13 @@ export default function JobCard({ job, job_proposal, stage, required_disc = fals
           onClick={
             job_proposal
               ? job_proposal?.status === 'documents_submitted'
-                ? undefined
+                ? handleDetail
                 : job_proposal?.expiration_date && false // new Date(job_proposal?.expiration_date) < new Date()
                   ? () => Notify.info('Proposta expirada. Entre em contato com o recrutador.')
                   : handleProposal
               : handleDetail
           }
-          disabled={job?.archived || job?.isDisqualified || !job?.visible}
+          disabled={job?.archived || isDisqualified}
           className={classNames(
             'w-full p-2 my-3 font-bold transition-all duration-300 rounded-full',
             job_proposal?.expiration_date && false // new Date(job_proposal?.expiration_date) < new Date()
@@ -94,6 +94,8 @@ export default function JobCard({ job, job_proposal, stage, required_disc = fals
               <>Proposta expirada</>
             ) : job_proposal?.status === 'documents_submitted' ? (
               <>Em Análise</>
+            ) : job_proposal?.status === 'completed' ? (
+              <>Parabéns! Você foi aprovado</>
             ) : (
               <>Proposta de Trabalho</>
             )
@@ -103,7 +105,7 @@ export default function JobCard({ job, job_proposal, stage, required_disc = fals
         </button>
       )}
       
-      <div className='flex w-full justify-end py-2'>
+      <div className='flex w-full justify-center sm:justify-end py-2'>
         <p>Etapa: <span className='font-bold'>{stage}</span></p>
       </div>
     </div>

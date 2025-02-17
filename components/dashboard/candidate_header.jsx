@@ -164,7 +164,9 @@ export function CandidateHeader({ user, signOut, openProfessionalProfile }) {
                           <div>
                             <button
                               type="button"
-                              onClick={() => Notify.warning("Não existe nenhuma conversa no momento.")}
+                              onClick={() =>
+                                Notify.warning('Não existe nenhuma conversa no momento.')
+                              }
                               className={
                                 'block text-left px-3 w-full py-2 text-base font-medium text-gray-900 rounded-md hover:bg-gray-100 hover:text-gray-800'
                               }
@@ -174,7 +176,7 @@ export function CandidateHeader({ user, signOut, openProfessionalProfile }) {
                             </button>
                             <button
                               type="button"
-                              onClick={() => Notify.warning("A caixa de notificações está vazia.")}
+                              onClick={() => Notify.warning('A caixa de notificações está vazia.')}
                               className="block w-full px-3 py-2 text-base font-medium text-left text-gray-900 rounded-md hover:bg-gray-100 hover:text-gray-800"
                             >
                               <span className="sr-only">View notifications</span>
@@ -243,9 +245,7 @@ export function CandidateHeader({ user, signOut, openProfessionalProfile }) {
               </Popover>
 
               <Popover className="relative">
-                <Popover.Button
-                  className="flex-shrink-0 p-1 text-gray-400 transition-all duration-300 bg-white rounded-full hover:scale-90 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                >
+                <Popover.Button className="flex-shrink-0 p-1 text-gray-400 transition-all duration-300 bg-white rounded-full hover:scale-90 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                   <span className="sr-only">View notifications</span>
                   <BellIcon className="w-6 h-6" aria-hidden="true" />
                 </Popover.Button>
@@ -376,7 +376,7 @@ export function CandidateHeader({ user, signOut, openProfessionalProfile }) {
                     <Menu.Item>
                       <a target="_blank" href="https://mavielorh.com.br/politica-privacidade/">
                         <p className="px-4 mb-2 text-xs hover:underline text-[#195579]">
-                          Termos e Condições de uso da Mavielo RH
+                          Política de privacidade da Mavielo RH
                         </p>
                       </a>
                     </Menu.Item>

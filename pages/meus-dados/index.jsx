@@ -129,7 +129,7 @@ function FormUser({ user, photoPath }) {
   );
 }
 
-export const FormImage = forwardRef(({ photoPath, setAvatarPicImg }, ref) => {
+export const FormImage = forwardRef(({ photoPath, setAvatarPicImg, labelTitle = "Foto de Perfil" }, ref) => {
   const [imageSrc, setImageSrc] = useState(null);
   const [croppedImage, setCroppedImage] = useState(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -239,7 +239,7 @@ export const FormImage = forwardRef(({ photoPath, setAvatarPicImg }, ref) => {
           </div>
         </div>
       )}
-      <p className="font-semibold text-center">Foto de perfil</p>
+      <p className="font-semibold text-center">{labelTitle}</p>
     </div>
   );
 });
