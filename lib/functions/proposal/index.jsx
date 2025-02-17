@@ -80,14 +80,36 @@ const sortJobs = (jobs = [], visibility = 'published') => {
   if (jobs?.length === 0) return [];
 
   if (visibility !== 'published') {
-    return jobs.sort((a, b) => {
+    const proposalJobs = jobs
+    .filter((application) => application?.job_proposal);
+
+    const sorted_jobs = jobs.sort((a, b) => {
       if (a.job.title < b.job.title) return -1;
       if (a.job.title > b.job.title) return 1;
       return 0;
     });
+
+    return [...proposalJobs, ...sorted_jobs]
   }
 
-  const proposalJobs = jobs.filter((application) => application?.job_proposal);
+  const proposalJobs = jobs
+    .filter((application) => application?.job_proposal)
+    .sort((a, b) => {
+      if (
+        a.job_proposal.status === 'documents_submitted' &&
+        b.job_proposal.status !== 'documents_submitted'
+      ) {
+        return -1;
+      }
+      if (
+        a.job_proposal.status !== 'documents_submitted' &&
+        b.job_proposal.status === 'documents_submitted'
+      ) {
+        return 1;
+      }
+      return 0;
+    });
+
   const otherJobs = jobs.filter((application) => !application?.job_proposal);
 
   const sortedOtherJobs = otherJobs.sort((a, b) => {

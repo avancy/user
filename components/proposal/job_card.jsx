@@ -28,7 +28,7 @@ export default function JobCard({ job, job_proposal, stage, required_disc = fals
       className={classNames(
         'ring-1 ring-gray-200 flex-1 p-6 xl:pt-[22px] rounded-[14px] bg-white shadow-sm shadow-gray-600/30',
         'h-[320px] md:h-[284px] flex flex-col justify-between',
-        job?.archived || isDisqualified ? 'opacity-40 pointer-events-none' : '',
+        job?.archived || isDisqualified || job_proposal?.status === 'completed' ? 'opacity-40 pointer-events-none' : '',
       )}
     >
       <div>
@@ -74,7 +74,7 @@ export default function JobCard({ job, job_proposal, stage, required_disc = fals
           onClick={
             job_proposal
               ? job_proposal?.status === 'documents_submitted'
-                ? undefined
+                ? handleDetail
                 : job_proposal?.expiration_date && false // new Date(job_proposal?.expiration_date) < new Date()
                   ? () => Notify.info('Proposta expirada. Entre em contato com o recrutador.')
                   : handleProposal
@@ -94,6 +94,8 @@ export default function JobCard({ job, job_proposal, stage, required_disc = fals
               <>Proposta expirada</>
             ) : job_proposal?.status === 'documents_submitted' ? (
               <>Em Análise</>
+            ) : job_proposal?.status === 'completed' ? (
+              <>Parabéns! Você foi aprovado</>
             ) : (
               <>Proposta de Trabalho</>
             )
@@ -103,7 +105,7 @@ export default function JobCard({ job, job_proposal, stage, required_disc = fals
         </button>
       )}
       
-      <div className='flex w-full justify-end py-2'>
+      <div className='flex w-full justify-center sm:justify-end py-2'>
         <p>Etapa: <span className='font-bold'>{stage}</span></p>
       </div>
     </div>
