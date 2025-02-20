@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { Alert } from '../common/alert';
-import JobManager from '@/classes/job';
+import JobManager from '@/lib/interactions/backend/job';
 import { Modal } from '@mui/material';
 import { Notify } from '../common/notification';
 

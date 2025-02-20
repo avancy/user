@@ -7,16 +7,19 @@ import {
   DISC_MAX_WORDS,
   DISC_MIN_WORDS,
 } from '@/components/evaluation/execute/constants';
+import EvaluationManager from '@/lib/interactions/backend/evaluations';
+import { useEffect } from 'react';
 
 export default function DiscForms() {
   const {
-    options: words,
-    setOptions: setWords,
+    options: applicantEvaluation,
+    setOptions: setApplicantEvaluation,
     formStep,
     setFormStep,
-    handleSave,
     nextStep,
   } = useTestContext();
+
+  const words = applicantEvaluation?.evaluation?.questions[0]?.disc.words;
 
   const backFormStep = () => {
     setFormStep(Math.max(formStep - 1, 0));
@@ -32,33 +35,53 @@ export default function DiscForms() {
       word.id === id ? { ...word, selected: !word.selected } : word,
     );
 
-    setWords(newWords);
+    setApplicantEvaluation((prev) => ({
+      ...prev,
+      evaluation: {
+        ...prev.evaluation,
+        questions: [
+          {
+            ...prev.evaluation.questions[0],
+            disc: {
+              ...prev.evaluation.questions[0].disc,
+              words: newWords,
+            },
+          },
+        ],
+      },
+    }));
   };
 
-  const handleSaveDisc = (words) => {
-    const selected = words
-      .filter(({ selected }) => selected)
-      .map(({ behaviorType }) => behaviorType);
+  const handleSaveDisc = async (words) => {
+    const selectedIds = words.filter(({ selected }) => selected).map(({ id }) => id);
 
-    const percentages = ['D', 'I', 'S', 'C'].reduce((acc, type) => {
-      acc.push({
-        name: type,
-        qnt: selected.filter((t) => t === type).length,
-      });
-      return acc;
-    }, []);
+    await EvaluationManager.applicant.start({
+      id: applicantEvaluation.evaluation.id,
+      date: new Date().toISOString(),
+    });
 
-    return percentages;
+    await EvaluationManager.applicant.updateAnswer({
+      id: applicantEvaluation.evaluation.id,
+      answer: {
+        question_id: applicantEvaluation.evaluation.questions[0].id,
+        words: selectedIds,
+      },
+    });
+
+    await EvaluationManager.applicant.finish({
+      id: applicantEvaluation.evaluation.id,
+      date: new Date().toISOString(),
+    });
   };
 
-  const nextFormStep = () => {
+  const nextFormStep = async () => {
     if (formStep === DISC_FORMS_FILTERS.length - 1) {
       if (words.filter((word) => word.selected).length < DISC_MIN_WORDS) {
         Notify.warning(`é necessário selecionar ao menos ${DISC_MIN_WORDS} palavras`);
         return;
       }
 
-      handleSave(handleSaveDisc);
+      await handleSaveDisc(words);
       nextStep();
       return;
     }
@@ -66,10 +89,16 @@ export default function DiscForms() {
     setFormStep(Math.min(formStep + 1, DISC_FORMS_FILTERS.length - 1));
   };
 
+  useEffect(() => {
+    if (applicantEvaluation.finished) {
+      nextStep();
+    }
+  }, []);
+
   return (
     <div className="relative flex flex-col items-center justify-center flex-1 w-screen gap-10">
       <div className="flex flex-col-reverse items-center justify-center w-full gap-10 px-2 md:px-12 md:flex-row min-h-36">
-        <div className="flex flex-col  gap-3 max-w-[950px]">
+        <div className="flex flex-col gap-3 max-w-[950px]">
           <h1 className="text-lg font-bold text-center lg:text-4xl lg:text-left font-montserrat">
             Selecione as palavras que melhor te definem
           </h1>
@@ -91,7 +120,7 @@ export default function DiscForms() {
         </div>
       </div>
       <div className="flex  flex-wrap gap-x-3 md:py-2 md:my-2 gap-y-2 max-h-full overflow-x-visible justify-center max-w-[1050px]">
-        {DISC_FORMS_FILTERS[formStep](words).map((word, index) => (
+        {words.slice(formStep * 20, formStep * 20 + 20).map((word, index) => (
           <Keyword
             {...word}
             classNames={`cursor-pointer hover:bg-brand-secondary-100 transition-all duration-300`}

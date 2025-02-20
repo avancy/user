@@ -4,7 +4,7 @@ import ProposalForm from '../proposal/proposal_form';
 import JobCards from '../proposal/job_cards';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import JobManager from '@/classes/job';
+import JobManager from '@/lib/interactions/backend/job';
 import Modal from '../common/modal';
 import {
   checkInviteExpiration,
@@ -50,7 +50,7 @@ export default function ApplicationsView({ applicant }) {
 
   return (
     <ProposalProvider>
-      <div className='w-full'>
+      <div className="w-full">
         <div className="flex items-center justify-center w-full sm:px-6 xl:px-32">
           <div className=" w-full max-w-[1680px] px-2 sm:px-5 md:px-8 font-montserrat">
             <div className="flex flex-col items-center w-full gap-9">

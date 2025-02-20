@@ -7,7 +7,9 @@ import DiscFinished from './components/disc/finished';
 import Details from './view/details';
 import Forms from './view/forms';
 import Finished from './view/finished';
+import { QMultipleChoices } from './components/utils/question_types';
 
+// types
 export const INTERNSHIPS_TYPES = {
   DETAILS: 'details',
   FORMS: 'forms',
@@ -19,19 +21,29 @@ export const EVALUATIONS_TYPES = {
   JOB: 'form',
 };
 
+export const QUESTIONS_TYPES = {
+  MULTIPLE_CHOICE: 'multiple_choice',
+};
+// lists
 export const INTERNSHIPS_TYPES_LIST = [
   INTERNSHIPS_TYPES.DETAILS,
   INTERNSHIPS_TYPES.FORMS,
   INTERNSHIPS_TYPES.FINISHED,
 ];
 
+export const EVALUATIONS_IMAGES_LIST = [
+  '/images/evaluations/1.webp',
+  '/images/evaluations/2.webp',
+]
+
+// components
 export const INTERNSHIPS = {
   [INTERNSHIPS_TYPES.DETAILS]: Details,
   [INTERNSHIPS_TYPES.FORMS]: Forms,
   [INTERNSHIPS_TYPES.FINISHED]: Finished,
 };
 
-export const TESTS = {
+export const EVALUATIONS = {
   [EVALUATIONS_TYPES.DISC]: {
     [INTERNSHIPS_TYPES.DETAILS]: DiscDetails,
     [INTERNSHIPS_TYPES.FORMS]: DiscForms,
@@ -42,6 +54,10 @@ export const TESTS = {
     [INTERNSHIPS_TYPES.FORMS]: EvaluationForms,
     [INTERNSHIPS_TYPES.FINISHED]: EvaluationFinished,
   },
+};
+
+export const QUESTIONS = {
+  [QUESTIONS_TYPES.MULTIPLE_CHOICE]: QMultipleChoices,
 };
 
 // DISC

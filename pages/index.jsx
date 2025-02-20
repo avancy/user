@@ -22,13 +22,14 @@ export async function getServerSideProps({ req }) {
     };
   }
   if (applicant?.error) {
-    if (applicant.error === 'UserNotFoundException')
+    if (applicant.error === 'UserNotFoundException') {
       return {
         redirect: {
           destination: `/auth/signin${redirectUrl}`,
           permanent: false,
         },
       };
+    }
     return {
       redirect: {
         destination: `/auth/signup/confirm${redirectUrl}`,

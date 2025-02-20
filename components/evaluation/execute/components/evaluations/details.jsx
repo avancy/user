@@ -3,16 +3,19 @@ import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useTestContext } from '@/contexts/evaluation';
 import { Footer } from '@/components/main-page/footer';
 import { Alert } from '@/components/common/alert';
-import DiscImage from '../utils/image';
 import { useEffect, useState } from 'react';
+import DiscImage from '../utils/image';
 import Link from 'next/link';
+import ImageByIndex from '../utils/image_by_index';
+import EvaluationManager from '@/lib/interactions/backend/evaluations';
 
 export default function EvaluationDetails() {
   const [isLoading, setIsLoading] = useState(true);
   const [accept, setAccept] = useState(false);
 
-  const { nextStep, options } = useTestContext();
+  const { nextStep, options, setOptions } = useTestContext();
   const evaluation = options.evaluation;
+  const imageIndex = evaluation.image_index;
 
   const handleStart = () => {
     accept
@@ -22,9 +25,18 @@ export default function EvaluationDetails() {
           'Continuar',
           'Cancelar',
         ).then((result) => {
-          // lógica para começar o teste
           if (result) {
-            nextStep();
+            setIsLoading(true);
+            EvaluationManager.applicant.start({
+              id: evaluation.id,
+              date: new Date().toISOString(),
+              onSuccess: (data) => {
+                console.log(data);
+                setOptions(data);
+                nextStep();
+              },
+              onFinally: () => setIsLoading(false),
+            });
           }
         })
       : Notify.warning('é necessário aceitar os termos para continuar');
@@ -155,7 +167,9 @@ export default function EvaluationDetails() {
             Iniciar Teste
           </button>
         </div>
-        <DiscImage />
+        <div className="flex-1 hidden h-full xl:flex">
+          <ImageByIndex index={imageIndex} className={'h-[75vh] flex-1'} />
+        </div>
       </div>
       <Footer isCandidatePage={true} />
     </div>

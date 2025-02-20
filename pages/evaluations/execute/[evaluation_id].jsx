@@ -1,17 +1,12 @@
-import CandidateHomeLayout from '@/components/dashboard/candidate_home_layout';
-import { fetchApplicant } from '@/lib/services/server_side_props';
-import Evaluations from '@/components/views/evaluations';
+import ExecEvaluation from '@/components/views/evaluations/execute';
 import EvaluationManager from '@/lib/interactions/backend/evaluations';
+import { fetchApplicant } from '@/lib/services/server_side_props';
 
-export default function Main({ applicant, evaluations }) {
-  return (
-    <CandidateHomeLayout applicant={applicant}>
-      <Evaluations evaluations={evaluations} />
-    </CandidateHomeLayout>
-  );
+export default function Main(props) {
+  return <ExecEvaluation {...props} />;
 }
 
-export async function getServerSideProps({ req }) {
+export async function getServerSideProps({ req, params }) {
   const applicant = await fetchApplicant(req);
   const redirectUrl = `?redirect=${encodeURIComponent(req.url)}`;
   if (applicant == null) {
@@ -22,20 +17,18 @@ export async function getServerSideProps({ req }) {
       },
     };
   }
-  
   if (applicant?.error) {
-    if (applicant.error === 'UserNotFoundException') {
+    if (applicant.error === 'EmailNotVerifiedException') {
       return {
         redirect: {
-          destination: `/auth/signin${redirectUrl}`,
+          destination: `/auth/signup/confirm${redirectUrl}`,
           permanent: false,
         },
       };
     }
-    
     return {
       redirect: {
-        destination: `/auth/signup/confirm${redirectUrl}`,
+        destination: `/auth/signin${redirectUrl}`,
         permanent: false,
       },
     };
@@ -51,15 +44,16 @@ export async function getServerSideProps({ req }) {
     };
   }
 
-  let response = {
-    props: { applicant, evaluations: [] },
-  };
+  const { evaluation_id } = params;
 
-  await EvaluationManager.getAll({
-    onSuccess: (res) => {
-      response.props.evaluations = res;
+  let applicant_evaluation;
+
+  await EvaluationManager.applicant.get({
+    evaluation_id,
+    onSuccess: (data) => {
+      applicant_evaluation = data;
     },
   });
 
-  return response;
+  return { props: { applicant, applicant_evaluation } };
 }
