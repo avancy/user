@@ -1,8 +1,12 @@
 import ExecEvaluation from '@/components/views/evaluations/execute';
 import EvaluationManager from '@/lib/interactions/backend/evaluations';
 import { fetchApplicant } from '@/lib/services/server_side_props';
+import EvaluationUtil from '@/lib/util/evaluation_util';
 
 export default function Main(props) {
+  console.log(props);
+  console.log(props.applicant_evaluation);
+  console.log(props.teste);
   return <ExecEvaluation {...props} />;
 }
 
@@ -42,7 +46,7 @@ export async function getServerSideProps({ req, params }) {
         permanent: false,
       },
     };
-  }
+  } 
 
   const { evaluation_id } = params;
 
@@ -55,5 +59,11 @@ export async function getServerSideProps({ req, params }) {
     },
   });
 
-  return { props: { applicant, applicant_evaluation } };
+  return {
+    props: {
+      applicant,
+      applicant_evaluation,
+      teste: EvaluationUtil.filterUserAnswers(applicant_evaluation),
+    },
+  };
 }

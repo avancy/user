@@ -18,26 +18,13 @@ class Applicant {
     }
   }
 
-  static async getStartTime({ id, onSuccess, onError, onFinally }) {
+  static async getAll({ onSuccess, onError, onFinally }) {
     try {
-      const { data } = await api.get(`/applicant_evaluations/start_at/${id}`);
+      const { data } = await api.get(`/applicant_evaluations/by_applicant`);
       onSuccess && onSuccess(data);
     } catch (error) {
       console.error(error);
-      Notify.error('Erro ao buscar horário de início');
-      onError && onError(error);
-    } finally {
-      onFinally && onFinally();
-    }
-  }
-
-  static async getCompletes({ onSuccess, onError, onFinally }) {
-    try {
-      const { data } = await api.get(`/applicant_evaluations/completes`);
-      onSuccess && onSuccess(data);
-    } catch (error) {
-      console.error(error);
-      Notify.error('Erro ao buscar avaliações completas');
+      Notify.error('Erro ao buscar avaliação do candidato');
       onError && onError(error);
     } finally {
       onFinally && onFinally();

@@ -59,6 +59,7 @@ export default function EvaluationDetails() {
   };
 
   useEffect(() => {
+    console.log(options);
     if (options.started) {
       nextStep();
     } else {

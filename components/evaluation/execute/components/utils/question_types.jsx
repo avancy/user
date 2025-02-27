@@ -52,6 +52,8 @@ export function QMultipleChoices({
         </div>
         <div className="mt-2 font-bold text-justify md:text-2xl">{question_text}</div>
         <div className="mt-6 space-y-3">
+          {console.log(question)}
+          {console.log(multiple_choices)}
           {multiple_choices.map((choice) => (
             <Choice
               key={choice.id}
