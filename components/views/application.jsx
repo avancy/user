@@ -22,9 +22,19 @@ export default function ApplicationsView({ applicant }) {
   const router = useRouter();
 
   const publishedJobs =
-    applications?.filter((application) => application.job.published && !application.job.archived) ||
-    [];
-  const archivedJobs = applications?.filter((application) => application.job.archived);
+    applications?.filter(
+      (application) =>
+        application.job.published &&
+        !application.job.archived &&
+        !application.disqualified &&
+        application.job_proposal?.status !== 'completed',
+    ) || [];
+  const archivedJobs = applications?.filter(
+    (application) =>
+      application.job.archived ||
+      application.disqualified ||
+      application.job_proposal?.status === 'completed',
+  );
 
   useEffect(() => {
     checkInviteExpiration(router.query, setIsLinkExpired);
@@ -45,8 +55,12 @@ export default function ApplicationsView({ applicant }) {
   }, [jobInfo, showModal]);
 
   useEffect(() => {
+    if (!applicant) {
+      return;
+    }
+
     JobManager.application.get({ onSucess: setApplications });
-  }, []);
+  }, [applicant]);
 
   return (
     <ProposalProvider>

@@ -1,5 +1,4 @@
 import { ArrowLeftCircleIcon, ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
-import { BlueSpinner } from '@/components/common/loadding/blue_spinner';
 import SecondStepForm from '../forms/proposal/second_step';
 import FourthStepForm from '../forms/proposal/fourth_step';
 import { useProposalContext } from '../../contexts/proposal';
@@ -9,6 +8,7 @@ import FifthStepForm from '../forms/proposal/fifth_step';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useEffect, useState } from 'react';
 import { api } from '@/lib/api';
+import { LoadingText } from '../common/loadding/text';
 
 export default function ProposalForm() {
   const {
@@ -71,7 +71,7 @@ export default function ProposalForm() {
     <Transition.Root show={isProposalMenuOpen && proposalStep >= 1} as={Fragment}>
       <Dialog
         as="div"
-        className="relative z-20"
+        className="relative z-50"
         onClose={() => !isAlertOpen && toggleProposalMenu()}
       >
         <div className="fixed inset-0 overflow-hidden bg-black/60">
@@ -131,7 +131,7 @@ export default function ProposalForm() {
                     <div
                       className={`absolute top-0 bottom-0 left-0 right-0 flex items-center justify-center w-full h-full ${isLoading ? 'bg-white' : 'hidden'} `}
                     >
-                      {isLoading && <BlueSpinner />}
+                      {isLoading && <LoadingText />}
                     </div>
                   </div>
 

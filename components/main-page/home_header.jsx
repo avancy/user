@@ -212,7 +212,7 @@ export function HomeHeader({ company_id, photoPath, website, style, type, compan
                     <Menu.Item>
                       <a target="_blank" href="https://mavielorh.com.br/politica-privacidade/">
                         <p className="px-4 mt-2 mb-2 text-xs hover:underline text-primary">
-                          Termos e Condições de uso da Mavielo RH
+                          Política de privacidade da Mavielo RH
                         </p>
                       </a>
                     </Menu.Item>
@@ -220,7 +220,7 @@ export function HomeHeader({ company_id, photoPath, website, style, type, compan
                     <Menu.Item>
                       <a target="_blank" href="https://mavielorh.com.br/termos-de-uso/">
                         <p className="px-4 mb-2 text-xs hover:underline text-primary">
-                          Política de privacidade da Mavielo RH
+                          Termos e Condições de uso da Mavielo RH
                         </p>
                       </a>
                     </Menu.Item>
@@ -338,7 +338,7 @@ export function HomeHeader({ company_id, photoPath, website, style, type, compan
                         <Menu.Item>
                           <a target="_blank" href="https://mavielorh.com.br/politica-privacidade/">
                             <p className="px-4 mt-2 mb-2 text-xs hover:underline text-primary">
-                              Termos e Condições de uso da Mavielo RH
+                              Política de privacidade da Mavielo RH
                             </p>
                           </a>
                         </Menu.Item>
@@ -346,7 +346,7 @@ export function HomeHeader({ company_id, photoPath, website, style, type, compan
                         <Menu.Item>
                           <a target="_blank" href="https://mavielorh.com.br/termos-de-uso/">
                             <p className="px-4 mb-2 text-xs hover:underline text-primary">
-                              Política de privacidade da Mavielo RH
+                              Termos e Condições de uso da Mavielo RH
                             </p>
                           </a>
                         </Menu.Item>

@@ -6,6 +6,7 @@ import { Tooltip } from '@material-tailwind/react';
 import { useEffect, useState } from 'react';
 import Dropzone from 'react-dropzone';
 import { api } from '@/lib/api';
+import { Notify } from '@/components/common/notification';
 
 export default function FifthStepForm() {
   const { proposal, toggleProposalMenu } = useProposalContext();
@@ -52,20 +53,35 @@ export default function FifthStepForm() {
 const RequiredDocuments = ({ proposal_id, documents, setDocuments, error, setError }) => {
   const invisibles = (2 - (documents.length % 4) + 4) % 4;
 
+  const sanitizeFileName = (fileName) => {
+    return fileName
+      .normalize('NFD') // Normalize accented characters
+      .replace(/[\u0300-\u036f]/g, '') // Remove accents
+      .replace(/[^\w\s]/g, '') // Remove non-alphanumeric characters except spaces
+      .replace(/\s+/g, ' ') // Replace multiple spaces with a single space
+      .trim(); // Trim leading and trailing spaces
+  };
+
   const onDrop = async (acceptedFiles, index) => {
     if (acceptedFiles.length > 0) {
-      if (acceptedFiles[0].type.includes('image') || acceptedFiles[0].type.includes('pdf')) {
+      if (acceptedFiles[0].type.includes('pdf')) {
+        let sanitizedFileName = sanitizeFileName(documents[index].name);
+
         try {
           const uploadUrlRes = await getUploadUrlProposal(
             proposal_id,
             acceptedFiles[0]?.name,
-            documents[index].name,
+            sanitizedFileName,
           );
+
           await fetch(uploadUrlRes.URL, {
             method: uploadUrlRes.Method,
             headers: uploadUrlRes.SignedHeader,
           }).then((res) => {
             if (!res.ok) {
+              Notify.error(
+                'Erro ao fazer o upload do arquivo, tente novamente ou entre em contato com o suporte.',
+              );
               throw new Error('Erro ao fazer upload do arquivo');
             }
 
@@ -74,10 +90,17 @@ const RequiredDocuments = ({ proposal_id, documents, setDocuments, error, setErr
                 return i === index ? { ...doc, status: 'uploaded', file: acceptedFiles[0] } : doc;
               }),
             );
+
+            Notify.success('Arquivo anexado com sucesso.');
           });
         } catch (error) {
+          Notify.error(
+            'Erro ao fazer o upload do arquivo, tente novamente ou entre em contato com o suporte.',
+          );
           console.error(error);
         }
+      } else {
+        Notify.error('O arquivo deve ser um PDF.');
       }
     }
   };
@@ -95,7 +118,7 @@ const RequiredDocuments = ({ proposal_id, documents, setDocuments, error, setErr
         {documents?.map((doc, index) => (
           <Dropzone
             key={index}
-            accept={'image/*, application/pdf'}
+            accept={'application/pdf'}
             multiple={false}
             onDrop={(acceptedFiles) => onDrop(acceptedFiles, index)}
           >

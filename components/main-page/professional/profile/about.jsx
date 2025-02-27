@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { Notify } from '../../../common/notification';
 import { Spinner } from '../../../common/loadding/spinner';
+import { ProfessionalProfileResumePDF } from './ProfessionalProfileResumePDF';
 
 export function ProfessionalProfileAbout({ setOpen, getUserUpdate }) {
   const { data, error, mutate } = useSWR('/api/applicant/profile-about', jsonFetcher);
@@ -64,6 +65,8 @@ export function ProfessionalProfileAbout({ setOpen, getUserUpdate }) {
     <>
       <form className="flex flex-col justify-between min-h-full" onSubmit={submit}>
         <div className="">
+          <ProfessionalProfileResumePDF getUserUpdate={getUserUpdate} />
+
           <div className="px-4 space-y-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
             <div>
               <label

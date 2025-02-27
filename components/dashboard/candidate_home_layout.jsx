@@ -15,6 +15,10 @@ export default function CandidateHomeLayout({ children, photoPath, applicant, ..
   const router = useRouter();
 
   useEffect(() => {
+    if (!applicant) {
+      return
+    }
+
     const getFillment = async () => {
       try {
         const res = await api.get(`/fillment`);
@@ -33,7 +37,7 @@ export default function CandidateHomeLayout({ children, photoPath, applicant, ..
         setShowFillResumeWarn(showFillWarn);
       }
     });
-  }, [userUpdatedProfile]);
+  }, [userUpdatedProfile, applicant]);
 
   const signOut = async () => {
     try {

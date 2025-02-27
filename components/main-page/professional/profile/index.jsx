@@ -10,7 +10,6 @@ import { Tabs } from '../../../tabs';
 const tabs = [
   { name: 'Sobre você', icon: UserIcon },
   { name: 'Currículo Preenchido', icon: DocumentTextIcon },
-  { name: 'Currículo PDF', icon: DocumentIcon },
 ];
 
 export function ProfessionalProfile({ open, setOpen, getUserUpdate }) {
@@ -71,7 +70,6 @@ export function ProfessionalProfile({ open, setOpen, getUserUpdate }) {
                         getUserUpdate={getUserUpdate}
                       />
                       <ProfessionalProfileResumeForm getUserUpdate={getUserUpdate} />
-                      <ProfessionalProfileResumePDF getUserUpdate={getUserUpdate} />
                     </Tabs>
                   </div>
                 </Dialog.Panel>
