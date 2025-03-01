@@ -71,6 +71,9 @@ export default function DiscForms() {
     await EvaluationManager.applicant.finish({
       id: applicantEvaluation.evaluation.id,
       date: new Date().toISOString(),
+      onSuccess: (data) => {
+        setApplicantEvaluation(data);
+      }
     });
   };
 

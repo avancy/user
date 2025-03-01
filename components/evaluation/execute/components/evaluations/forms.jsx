@@ -11,15 +11,11 @@ export default function EvaluationForms() {
   const [questionsLoading, setQuestionsLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
 
-  const { nextStep, options, setOptions, onSave } = useTestContext();
-
-  console.log(options);
+  const { nextStep, options, setOptions } = useTestContext();
 
   const evaluation = options?.evaluation;
   const questions = evaluation?.questions;
   const qntQuestions = questions?.length;
-  console.log(questions);
-  console.log(qntQuestions);
 
   const currentQuestion = questions?.[currentQuestionIndex] || null;
 
@@ -37,8 +33,6 @@ export default function EvaluationForms() {
       },
     });
 
-    console.log(currentQuestionIndex);
-    console.log(qntQuestions);
     if (currentQuestionIndex + 1 >= qntQuestions) {
       await EvaluationManager.applicant.finish({
         id: evaluation.id,
@@ -61,16 +55,21 @@ export default function EvaluationForms() {
   };
 
   useEffect(() => {
-    if (options.finished) {
+    const currentDate = new Date();
+    const startedAt = new Date(options.started_at);
+    const expirationPreview = new Date(
+      startedAt.getTime() + options.valid_days * 24 * 60 * 60 * 1000,
+    );
+    if (options.finished || currentDate.getTime() < expirationPreview.getTime()) {
       nextStep();
     } else {
       setIsLoading(false);
     }
-  }, []);
+  }, [options]);
 
   const Component = QUESTIONS?.[currentQuestion?.question_type] || null;
 
-  if ((isLoading, Component === null)) {
+  if (isLoading || Component === null) {
     return (
       <div
         className="flex flex-col items-center justify-center flex-1"

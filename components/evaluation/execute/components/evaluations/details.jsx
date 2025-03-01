@@ -1,13 +1,12 @@
+import EvaluationManager from '@/lib/interactions/backend/evaluations';
 import { Notify } from '@/components/common/notification';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useTestContext } from '@/contexts/evaluation';
 import { Footer } from '@/components/main-page/footer';
+import ImageByIndex from '../utils/image_by_index';
 import { Alert } from '@/components/common/alert';
 import { useEffect, useState } from 'react';
-import DiscImage from '../utils/image';
 import Link from 'next/link';
-import ImageByIndex from '../utils/image_by_index';
-import EvaluationManager from '@/lib/interactions/backend/evaluations';
 
 export default function EvaluationDetails() {
   const [isLoading, setIsLoading] = useState(true);
@@ -37,7 +36,7 @@ export default function EvaluationDetails() {
               },
               onFinally: () => setIsLoading(false),
             });
-          }
+          } 
         })
       : Notify.warning('é necessário aceitar os termos para continuar');
   };
@@ -59,12 +58,24 @@ export default function EvaluationDetails() {
   };
 
   useEffect(() => {
-    console.log(options);
     if (options.started) {
-      nextStep();
-    } else {
-      setIsLoading(false);
+      const currentDate = new Date();
+
+      if (options.expired_at && currentDate.getTime() < new Date(options.expired_at).getTime()) {
+        nextStep();
+        return;
+      }
+
+      const startedAt = new Date(options.started_at);
+      const expirationPreview = new Date(
+        startedAt.getTime() + options.valid_days * 24 * 60 * 60 * 1000,
+      );
+      if (currentDate.getTime() < expirationPreview.getTime()) {
+        nextStep();
+        return;
+      }
     }
+    setIsLoading(false);
   }, []);
 
   if (isLoading) {

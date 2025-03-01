@@ -1,10 +1,10 @@
 import { Notify } from '@/components/common/notification';
 import { useTestContext } from '@/contexts/evaluation';
+import { Footer } from '@/components/main-page/footer';
+import { XMarkIcon } from '@heroicons/react/20/solid';
 import { Alert } from '@/components/common/alert';
 import { useEffect, useState } from 'react';
 import DiscImage from '../utils/image';
-import { Footer } from '@/components/main-page/footer';
-import { XMarkIcon } from '@heroicons/react/20/solid';
 import Link from 'next/link';
 
 export default function DiscDetails() {
