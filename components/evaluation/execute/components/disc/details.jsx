@@ -1,15 +1,15 @@
 import { Notify } from '@/components/common/notification';
 import { useTestContext } from '@/contexts/evaluation';
-import { Alert } from '@/components/common/alert';
-import { useState } from 'react';
-import DiscImage from '../utils/image';
 import { Footer } from '@/components/main-page/footer';
 import { XMarkIcon } from '@heroicons/react/20/solid';
+import { Alert } from '@/components/common/alert';
+import { useEffect, useState } from 'react';
+import DiscImage from '../utils/image';
 import Link from 'next/link';
 
 export default function DiscDetails() {
   const [accept, setAccept] = useState(false);
-  const { nextStep } = useTestContext();
+  const { nextStep, options } = useTestContext();
 
   const handleNextStep = () => {
     accept
@@ -23,6 +23,10 @@ export default function DiscDetails() {
         })
       : Notify.warning('é necessário aceitar os termos para continuar');
   };
+
+  useEffect(() => {
+    options.started && nextStep();
+  }, []);
 
   return (
     <div className="flex flex-col justify-between flex-1">

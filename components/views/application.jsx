@@ -4,7 +4,7 @@ import ProposalForm from '../proposal/proposal_form';
 import JobCards from '../proposal/job_cards';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import JobManager from '@/classes/job';
+import JobManager from '@/lib/interactions/backend/job';
 import Modal from '../common/modal';
 import {
   checkInviteExpiration,

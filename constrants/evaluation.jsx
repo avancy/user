@@ -3,19 +3,6 @@ export const EVALUATION_STAGE_IMAGES = {
   2: '/images/evaluations/2.webp',
 };
 
-export const EVALUATION_MOCKS = {
-  disc: {
-    title: 'Teste Disc',
-    description: 'Avaliação que revela seu perfil comportamental para um melhor autoconhecimento.',
-    status: 'pending',
-  },
-  math: {
-    title: 'EM BREVE',
-    description: 'Novos testes de capacidade e comportamentos serão disponiveis em breve',
-    status: 'in_production',
-  },
-};
-
 // Mapeamento de status
 export const EVALUATION_STATUS = {
   pending: 'Pendente',
