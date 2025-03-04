@@ -6,7 +6,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import JobCard from './job_card';
 
-export default function SwiperCarousel({ data, swiperRef, setIsPaginationActive }) {
+export default function SwiperCarousel({ data, swiperRef, setIsPaginationActive }) {  
   return (
     <Swiper
       ref={swiperRef}
@@ -39,6 +39,7 @@ export default function SwiperCarousel({ data, swiperRef, setIsPaginationActive 
             job={item?.job}
             job_proposal={item?.job_proposal || null}
             stage={item?.stage}
+            isDisqualified={item?.disqualified}
             c={item?.required_disc}
           />
         </SwiperSlide>

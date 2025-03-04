@@ -1,12 +1,12 @@
 import CandidateHomeLayout from '@/components/dashboard/candidate_home_layout';
 import { fetchApplicant } from '@/lib/services/server_side_props';
-import { EVALUATION_MOCKS } from '@/constrants/evaluation';
 import Evaluations from '@/components/views/evaluations';
+import EvaluationManager from '@/lib/interactions/backend/evaluations';
 
-export default function Main({ applicant }) {
+export default function Main({ applicant, evaluations }) {
   return (
     <CandidateHomeLayout applicant={applicant}>
-      <Evaluations evaluations={EVALUATION_MOCKS} />
+      <Evaluations evaluations={evaluations} />
     </CandidateHomeLayout>
   );
 }
@@ -22,14 +22,17 @@ export async function getServerSideProps({ req }) {
       },
     };
   }
+  
   if (applicant?.error) {
-    if (applicant.error === 'UserNotFoundException')
+    if (applicant.error === 'UserNotFoundException') {
       return {
         redirect: {
           destination: `/auth/signin${redirectUrl}`,
           permanent: false,
         },
       };
+    }
+    
     return {
       redirect: {
         destination: `/auth/signup/confirm${redirectUrl}`,
@@ -48,5 +51,15 @@ export async function getServerSideProps({ req }) {
     };
   }
 
-  return { props: { applicant } };
+  let response = {
+    props: { applicant, evaluations: [] },
+  };
+
+  await EvaluationManager.getAll({
+    onSuccess: (res) => {
+      response.props.evaluations = res;
+    },
+  });
+
+  return response;
 }

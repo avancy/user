@@ -69,7 +69,7 @@ export function Evaluation({ evaluation, job_id }) {
           href={`/evaluations/execute?evaluation_id=${encodeURIComponent(evaluation.id)}&stage_id=${encodeURIComponent(evaluation.stage_id)}&job_id=${encodeURIComponent(job_id)}`}
         >
           Iniciar Teste
-        </Link>
+        </Link>ç
       </button>
     </div>
   );

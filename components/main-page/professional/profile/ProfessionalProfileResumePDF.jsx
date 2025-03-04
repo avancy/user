@@ -3,6 +3,7 @@ import { MyDropzone } from '../../../dropzone-wrapper/my_dropzone';
 import useSWR from 'swr';
 import { useEffect } from 'react';
 import { ArrowTopRightOnSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { Notify } from '@/components/common/notification';
 
 export function ProfessionalProfileResumePDF({ getUserUpdate }) {
   const {
@@ -81,6 +82,7 @@ export function ProfessionalProfileResumePDF({ getUserUpdate }) {
             maxFiles={1}
             onComplete={(res) => {
               typeof onUpdate === 'function' && onUpdate();
+              Notify.success("Currículo anexado com sucesso!")
               getUserUpdate((prevState) => {
                 const newState = !prevState;
                 return newState;

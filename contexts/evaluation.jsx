@@ -9,7 +9,7 @@ const TestContext = createContext();
 export function EvaluationProvider({ children, values, onClose, onSave }) {
   const [step, setStep] = useState(INTERNSHIPS_TYPES.DETAILS);
   const [formStep, setFormStep] = useState(0);
-  const [options, setOptions] = useState([]);
+  const [options, setOptions] = useState(values);
 
   const nextStep = () => {
     const current = INTERNSHIPS_TYPES_LIST.findIndex((item) => item === step);
@@ -42,7 +42,7 @@ export function EvaluationProvider({ children, values, onClose, onSave }) {
   };
 
   useEffect(() => {
-    options.length === 0 && setOptions(values);
+    setOptions(values);
   }, []);
 
   return (

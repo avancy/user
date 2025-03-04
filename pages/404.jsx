@@ -8,11 +8,12 @@ export default function NotFound() {
   return (
     <>
       <Head>
-        <title>Mavielo RH</title>
+        <link rel="shortcut icon" href="/favicon-v2.ico" />
         <meta
           name="description"
           content="Most bookkeeping software is accurate, but hard to use. We make the opposite trade-off, and hope you don’t get audited."
         />
+        <title>Mavielo RH</title>
       </Head>
       <main className="">
         <div className="flex flex-col items-center justify-center ">

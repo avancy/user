@@ -14,6 +14,7 @@ import {
   XMarkIcon,
 } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
+import { Notify } from '../common/notification';
 
 export function CandidateHeader({ user, signOut, openProfessionalProfile }) {
   const router = useRouter();
@@ -54,7 +55,7 @@ export function CandidateHeader({ user, signOut, openProfessionalProfile }) {
                   </Link>
                   <span
                     className={clsx(
-                      'absolute bottom-0 left-0 w-full h-[3px] group-hover:max-w-full rounded-full transition-all duration-300 bg-gradient-to-r from-brand-primary-100 to-brand-secondary-500 rounded-md',
+                      'absolute bottom-0 left-0 w-full h-[3px] group-hover:max-w-full transition-all duration-300 bg-gradient-to-r from-brand-primary-100 to-brand-secondary-500 rounded-md',
                       isRouteActive(item.href, router.pathname) ? '' : 'max-w-0',
                     )}
                   />
@@ -163,6 +164,9 @@ export function CandidateHeader({ user, signOut, openProfessionalProfile }) {
                           <div>
                             <button
                               type="button"
+                              onClick={() =>
+                                Notify.warning('Não existe nenhuma conversa no momento.')
+                              }
                               className={
                                 'block text-left px-3 w-full py-2 text-base font-medium text-gray-900 rounded-md hover:bg-gray-100 hover:text-gray-800'
                               }
@@ -172,6 +176,7 @@ export function CandidateHeader({ user, signOut, openProfessionalProfile }) {
                             </button>
                             <button
                               type="button"
+                              onClick={() => Notify.warning('A caixa de notificações está vazia.')}
                               className="block w-full px-3 py-2 text-base font-medium text-left text-gray-900 rounded-md hover:bg-gray-100 hover:text-gray-800"
                             >
                               <span className="sr-only">View notifications</span>
@@ -208,13 +213,13 @@ export function CandidateHeader({ user, signOut, openProfessionalProfile }) {
                         </div>
                         <div>
                           <a target="_blank" href="https://mavielorh.com.br/termos-de-uso/">
-                            <p className="px-4 mt-2 mb-2 text-xs hover:underline text-primary">
+                            <p className="px-4 mt-2 mb-2 text-xs hover:underline text-[#195579]">
                               Termos e Condições de uso da Avancy
                             </p>
                           </a>
 
                           <a target="_blank" href="https://mavielorh.com.br/politica-privacidade/">
-                            <p className="px-4 mb-2 text-xs hover:underline text-primary">
+                            <p className="px-4 mb-2 text-xs hover:underline text-[#195579]">
                               Política de privacidade da Avancy
                             </p>
                           </a>
@@ -226,21 +231,31 @@ export function CandidateHeader({ user, signOut, openProfessionalProfile }) {
               </div>
             </Transition.Root>
             <div className="hidden gap-10 lg:ml-4 lg:flex lg:items-center w-[228px]">
-              <button
-                type="button"
-                className="flex-shrink-0 p-1 text-gray-400 transition-all duration-300 bg-white rounded-full hover:scale-90 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-              >
-                <span className="sr-only">View notifications</span>
-                <ChatBubbleOvalLeftEllipsisIcon className="w-6 h-6" aria-hidden="true" />
-              </button>
+              <Popover className="relative">
+                <Popover.Button className="flex-shrink-0 p-1 text-gray-400 transition-all duration-300 bg-white rounded-full hover:scale-90 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                  <span className="sr-only">View notifications</span>
+                  <ChatBubbleOvalLeftEllipsisIcon className="w-6 h-6" aria-hidden="true" />
+                </Popover.Button>
 
-              <button
-                type="button"
-                className="flex-shrink-0 p-1 text-gray-400 transition-all duration-300 bg-white rounded-full hover:scale-90 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-              >
-                <span className="sr-only">View notifications</span>
-                <BellIcon className="w-6 h-6" aria-hidden="true" />
-              </button>
+                <Popover.Panel className="absolute z-20 bg-white w-80 text-xs h-64 right-0 top-8">
+                  <div className="h-full w-full flex items-center justify-center p-4 rounded-md shadow-lg">
+                    <p>Não existe nenhuma conversa no momento.</p>
+                  </div>
+                </Popover.Panel>
+              </Popover>
+
+              <Popover className="relative">
+                <Popover.Button className="flex-shrink-0 p-1 text-gray-400 transition-all duration-300 bg-white rounded-full hover:scale-90 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                  <span className="sr-only">View notifications</span>
+                  <BellIcon className="w-6 h-6" aria-hidden="true" />
+                </Popover.Button>
+
+                <Popover.Panel className="absolute z-20 bg-white w-80 text-xs h-64 right-0 top-8">
+                  <div className="h-full w-full flex items-center justify-center p-4 rounded-md shadow-lg">
+                    <p>A caixa de notificações está vazia.</p>
+                  </div>
+                </Popover.Panel>
+              </Popover>
 
               {/* Profile dropdown */}
               <Menu as="div" className="relative z-50 flex-shrink-0 ml-4 font-helvetica">
@@ -267,7 +282,26 @@ export function CandidateHeader({ user, signOut, openProfessionalProfile }) {
                   leaveFrom="transform opacity-100 scale-100"
                   leaveTo="transform opacity-0 scale-95"
                 >
-                  <Menu.Items className="absolute right-0 z-10 py-1 mt-2 origin-top-right bg-white rounded-md shadow-lg w-60 ring-1 ring-black ring-opacity-5 focus:outline-none">
+                  <Menu.Items className="absolute right-0 z-10 py-1 mt-2 origin-top-right bg-white rounded-md shadow-lg w-80 ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <div className="flex items-center px-4 py-3">
+                      <div className="flex-shrink-0">
+                        {user?.f_photo?.url ? (
+                          <img
+                            src={user?.f_photo?.url}
+                            alt="Avatar"
+                            className="w-10 h-10 text-sm text-gray-500 rounded-full"
+                          />
+                        ) : (
+                          <UserCircleIcon className="w-10 h-10 text-sm text-gray-500 " />
+                        )}
+                      </div>
+
+                      <div className="ml-3">
+                        <div className="text-base font-medium text-gray-800">{user?.name}</div>
+                        <div className="text-sm font-medium text-gray-500">{user?.email}</div>
+                      </div>
+                    </div>
+
                     {NAVIGATION.USER.map((item) => (
                       <Menu.Item key={item.name}>
                         {({ active }) => {
@@ -342,7 +376,7 @@ export function CandidateHeader({ user, signOut, openProfessionalProfile }) {
                     <Menu.Item>
                       <a target="_blank" href="https://mavielorh.com.br/politica-privacidade/">
                         <p className="px-4 mb-2 text-xs hover:underline text-[#195579]">
-                          Termos e Condições de uso da Mavielo RH
+                          Política de privacidade da Mavielo RH
                         </p>
                       </a>
                     </Menu.Item>
