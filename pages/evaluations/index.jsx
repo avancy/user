@@ -2,8 +2,14 @@ import CandidateHomeLayout from '@/components/dashboard/candidate_home_layout';
 import { fetchApplicant } from '@/lib/services/server_side_props';
 import Evaluations from '@/components/views/evaluations';
 import EvaluationManager from '@/lib/interactions/backend/evaluations';
+import { useEffect, useState } from 'react';
 
-export default function Main({ applicant, evaluations }) {
+export default function Main({ applicant }) {
+  const [evaluations, setEvaluations] = useState([]);
+
+  useEffect(() => {
+    EvaluationManager.getAll({ onSuccess: setEvaluations });
+  }, []);
   return (
     <CandidateHomeLayout applicant={applicant}>
       <Evaluations evaluations={evaluations} />
@@ -22,7 +28,7 @@ export async function getServerSideProps({ req }) {
       },
     };
   }
-  
+
   if (applicant?.error) {
     if (applicant.error === 'UserNotFoundException') {
       return {
@@ -32,7 +38,7 @@ export async function getServerSideProps({ req }) {
         },
       };
     }
-    
+
     return {
       redirect: {
         destination: `/auth/signup/confirm${redirectUrl}`,
@@ -52,14 +58,8 @@ export async function getServerSideProps({ req }) {
   }
 
   let response = {
-    props: { applicant, evaluations: [] },
+    props: { applicant },
   };
-
-  await EvaluationManager.getAll({
-    onSuccess: (res) => {
-      response.props.evaluations = res;
-    },
-  });
 
   return response;
 }

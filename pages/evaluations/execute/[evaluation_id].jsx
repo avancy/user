@@ -2,9 +2,20 @@ import ExecEvaluation from '@/components/views/evaluations/execute';
 import EvaluationManager from '@/lib/interactions/backend/evaluations';
 import { fetchApplicant } from '@/lib/services/server_side_props';
 import EvaluationUtil from '@/lib/util/evaluation_util';
-  
-export default function Main(props) {
-  return <ExecEvaluation {...props} />;
+import { useEffect, useState } from 'react';
+
+export default function Main({ applicant, evaluation_id }) {
+  const [applicant_evaluation, setApplicantEvaluation] = useState(null);
+  useEffect(() => {
+    EvaluationManager.applicant.get({
+      evaluation_id,
+      onSuccess: (data) => setApplicantEvaluation(EvaluationUtil.filterUserAnswers(data)),
+    });
+  }, []);
+  if (!applicant_evaluation) {
+    return null;
+  }
+  return <ExecEvaluation applicant={applicant} applicant_evaluation={applicant_evaluation} />;
 }
 
 export async function getServerSideProps({ req, params }) {
@@ -47,20 +58,10 @@ export async function getServerSideProps({ req, params }) {
 
   const { evaluation_id } = params;
 
-  let applicant_evaluation;
-
-  await EvaluationManager.applicant.get({
-    evaluation_id,
-    onSuccess: (data) => {
-      applicant_evaluation = data;
-      console.log(data);
-    },
-  });  
-
   return {
     props: {
       applicant,
-      applicant_evaluation: EvaluationUtil.filterUserAnswers(applicant_evaluation),
+      evaluation_id,
     },
   };
 }
