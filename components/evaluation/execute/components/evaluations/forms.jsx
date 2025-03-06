@@ -56,11 +56,12 @@ export default function EvaluationForms() {
 
   useEffect(() => {
     const currentDate = new Date();
-    const startedAt = new Date(options.started_at);
-    const expirationPreview = new Date(
-      startedAt.getTime() + options.valid_days * 24 * 60 * 60 * 1000,
-    );
-    if (options.finished || currentDate.getTime() < expirationPreview.getTime()) {
+
+    if (
+      options.finished ||
+      (options.expiration_termination &&
+        currentDate.getTime() > new Date(options.expiration_termination).getTime())
+    ) {
       nextStep();
     } else {
       setIsLoading(false);
