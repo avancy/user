@@ -74,9 +74,13 @@ const RequiredDocuments = ({ proposal_id, documents, setDocuments, error, setErr
             sanitizedFileName,
           );
 
-          await fetch(uploadUrlRes.URL, {
-            method: uploadUrlRes.Method,
-            headers: uploadUrlRes.SignedHeader,
+          const result = await fetch(uploadUrlRes.URL, {
+            method: uploadUrlRes.Method, // Confirma se está vindo como PUT
+            headers: {
+              ...uploadUrlRes.SignedHeader,
+              'Content-Type': acceptedFiles[0].type, // Garante que é "application/pdf"
+            },
+            body: acceptedFiles[0], // Envia o arquivo corretamente
           }).then((res) => {
             if (!res.ok) {
               Notify.error(
