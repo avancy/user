@@ -13,6 +13,7 @@ export const NAVIGATION = {
   USER: [
     { name: 'Currículo', type: TYPE.POPUP },
     { name: 'Vagas', href: 'https://mavielorh.com.br/vagas', type: TYPE.EXTERNAL },
+    {name: 'Bancos de Talentos', href: '/talentbanks', type: TYPE.PAGE},
   ],
   TYPE,
 };

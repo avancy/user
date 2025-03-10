@@ -2,13 +2,13 @@ import CandidateHomeLayout from '@/components/dashboard/candidate_home_layout';
 import { fetchApplicant } from '@/lib/services/server_side_props';
 import ApplicationsView from '@/components/views/application';
 
-export default function Applications({ applicant }) {
-  return (
-    <CandidateHomeLayout applicant={applicant}>
-      <ApplicationsView applicant={applicant} />
-    </CandidateHomeLayout>
-  );
+export default function Main({ applicant }) {
+  return <ApplicationsView applicant={applicant} />;
 }
+
+Main.getLayout = ({ page, page_props }) => (
+  <CandidateHomeLayout {...page_props}>{page}</CandidateHomeLayout>
+);
 
 export async function getServerSideProps({ req }) {
   const applicant = await fetchApplicant(req);

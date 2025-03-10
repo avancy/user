@@ -1,3 +1,4 @@
+import { DataTransferProvider } from '@/contexts/data_transfer';
 import { Notify } from '@/components/common/notification';
 import { Authenticator } from '@aws-amplify/ui-react';
 import { Alert } from '@/components/common/alert';
@@ -5,7 +6,6 @@ import Modal from '@/components/common/modal';
 import { Amplify } from 'aws-amplify';
 import config from '../aws-exports';
 import '../styles/globals.css';
-import { DataTransferProvider } from '@/contexts/data_transfer';
 
 if (process.env.NODE_ENV === 'development') {
   Amplify.configure({
@@ -46,7 +46,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 function MyApp({ Component, pageProps }) {
-  const getLayout = Component.getLayout ?? ((page) => page);
+  const getLayout = Component.getLayout ?? (({ page }) => page);
 
   return (
     <>
@@ -55,7 +55,7 @@ function MyApp({ Component, pageProps }) {
           <Notify />
           <Modal />
           <Alert />
-          {getLayout(<Component {...pageProps} />)}
+          {getLayout({ page: <Component {...pageProps} />, page_props: pageProps })}
         </DataTransferProvider>
       </Authenticator.Provider>
     </>

@@ -1,20 +1,20 @@
 import { Menu, Popover, Transition } from '@headlessui/react';
 import { UserCircleIcon } from '@heroicons/react/20/solid';
 import MavieloLogo from '@/public/images/logo.png';
+import { Notify } from '../common/notification';
 import { NAVIGATION } from './constrants';
 import { useRouter } from 'next/router';
 import { classNames } from '@/util/css';
 import { Fragment } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import clsx from 'clsx';
 import {
   Bars3Icon,
   ChatBubbleOvalLeftEllipsisIcon,
   BellIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
-import clsx from 'clsx';
-import { Notify } from '../common/notification';
 
 export function CandidateHeader({ user, signOut, openProfessionalProfile }) {
   const router = useRouter();
@@ -237,8 +237,8 @@ export function CandidateHeader({ user, signOut, openProfessionalProfile }) {
                   <ChatBubbleOvalLeftEllipsisIcon className="w-6 h-6" aria-hidden="true" />
                 </Popover.Button>
 
-                <Popover.Panel className="absolute z-20 bg-white w-80 text-xs h-64 right-0 top-8">
-                  <div className="h-full w-full flex items-center justify-center p-4 rounded-md shadow-lg">
+                <Popover.Panel className="absolute right-0 z-20 h-64 text-xs bg-white w-80 top-8">
+                  <div className="flex items-center justify-center w-full h-full p-4 rounded-md shadow-lg">
                     <p>Não existe nenhuma conversa no momento.</p>
                   </div>
                 </Popover.Panel>
@@ -250,8 +250,8 @@ export function CandidateHeader({ user, signOut, openProfessionalProfile }) {
                   <BellIcon className="w-6 h-6" aria-hidden="true" />
                 </Popover.Button>
 
-                <Popover.Panel className="absolute z-20 bg-white w-80 text-xs h-64 right-0 top-8">
-                  <div className="h-full w-full flex items-center justify-center p-4 rounded-md shadow-lg">
+                <Popover.Panel className="absolute right-0 z-20 h-64 text-xs bg-white w-80 top-8">
+                  <div className="flex items-center justify-center w-full h-full p-4 rounded-md shadow-lg">
                     <p>A caixa de notificações está vazia.</p>
                   </div>
                 </Popover.Panel>

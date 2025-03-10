@@ -2,17 +2,17 @@
 
 import { FormBuilder, InputType, InputWidth } from '@/components/common/form_builder';
 import CandidateHomeLayout from '@/components/dashboard/candidate_home_layout';
+import { forwardRef, useCallback, useEffect, useRef, useState } from 'react';
 import { fetchApplicant } from '@/lib/services/server_side_props';
+import { UserCircleIcon } from '@heroicons/react/24/outline';
 import { Notify } from '@/components/common/notification';
 import { formatPhoneNumber } from '@/components/masks';
-import { forwardRef, useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
+import Cropper from 'react-easy-crop';
 import { Auth } from 'aws-amplify';
 import { api } from '@/lib/api';
-import * as yup from 'yup';
-import Cropper from 'react-easy-crop';
 import Image from 'next/image';
-import { UserCircleIcon } from '@heroicons/react/24/outline';
+import * as yup from 'yup';
 
 function FormUser({ user, photoPath }) {
   const inputRef = useRef(null);

@@ -53,6 +53,7 @@
     "yup": "^1.2.0"
   },
   "devDependencies": {
+    "@faker-js/faker": "^9.6.0",
     "autoprefixer": "^10.4.13",
     "postcss": "^8.4.20",
     "prettier": "^3.3.3",
