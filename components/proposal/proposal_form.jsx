@@ -51,10 +51,10 @@ export default function ProposalForm() {
     isProposalMenuOpen &&
       proposal?.id &&
       api.get(`/jobs/proposal/forms/${proposal?.id}`).then(({ data }) => {
-        const foundForms = data.filter((form) => form.name.startsWith('form_'));
+        const foundForms = data?.filter((form) => form.name.startsWith('form_'));
         const foundForm =
-          foundForms.length > 0
-            ? foundForms.reduce((prev, current) =>
+          foundForms?.length > 0
+            ? foundForms?.reduce((prev, current) =>
                 Number(current.name.replace('form_', '')) > Number(prev.name.replace('form_', ''))
                   ? current
                   : prev,
