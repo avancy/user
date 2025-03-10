@@ -74,9 +74,6 @@ const RequiredDocuments = ({ proposal_id, documents, setDocuments, error, setErr
             sanitizedFileName,
           );
 
-          console.log(acceptedFiles[0].type)
-          console.log(uploadUrlRes);
-
           const result = await fetch(uploadUrlRes.URL, {
             method: uploadUrlRes.Method, // Confirma se está vindo como PUT
             headers: {
