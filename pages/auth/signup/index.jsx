@@ -7,7 +7,7 @@ export default function Main() {
   return <SignupIndexView />;
 }
 
-Main.getLayout = (page) => (
+Main.getLayout = ({ page }) => (
   <AuthLayout>
     <SignupLayout>{page}</SignupLayout>
   </AuthLayout>

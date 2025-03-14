@@ -7,7 +7,7 @@ export default function Main() {
   return <SignupValidateCodeView />;
 }
 
-Main.getLayout = (page) => (
+Main.getLayout = ({ page }) => (
   <AuthLayout>
     <SignupLayout>{page}</SignupLayout>
   </AuthLayout>

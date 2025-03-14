@@ -46,7 +46,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 function MyApp({ Component, pageProps }) {
-  const getLayout = Component.getLayout ?? (({ page }) => page);
+  const getLayout = Component.getLayout || (({ page, page_props }) => page);
 
   return (
     <>
@@ -55,7 +55,7 @@ function MyApp({ Component, pageProps }) {
           <Notify />
           <Modal />
           <Alert />
-          {getLayout({ page: <Component {...pageProps} />, page_props: pageProps })}
+          {getLayout({ page: <Component {...pageProps} />, page_props: pageProps ? pageProps : {} })}
         </DataTransferProvider>
       </Authenticator.Provider>
     </>

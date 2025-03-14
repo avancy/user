@@ -2,14 +2,15 @@ import CandidateHomeLayout from '@/components/dashboard/candidate_home_layout';
 import TalentBankManager from '@/lib/interactions/backend/talentbank';
 import { fetchApplicant } from '@/lib/services/server_side_props';
 import TalentBanksView from '@/components/views/talentbanks';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Main() {
   const [talentBanks, setTalentBanks] = useState([]);
 
   useEffect(() => {
-    TalentBankManager.getAll({
-      onSuccess: setTalentBanks,
+    console.log('sadfa')
+    TalentBankManager.getSubscribed({
+      onSuccess: setTalentBanks,  
     });
   }, []);
 

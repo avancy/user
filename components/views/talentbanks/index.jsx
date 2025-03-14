@@ -50,7 +50,7 @@ function DepartmentList({ departments }) {
       <ul className="flex flex-col pl-5 list-disc gap-y-2">
         {departments.map((department) => (
           <li key={department.id} className="font-sans text-sm text-gray-700">
-            {department.Name}
+            {department.name}
           </li>
         ))}
       </ul>

@@ -14,7 +14,7 @@ export default function Main({ position_title, about, uploaded_resume, f_photo }
   );
 }
 
-Main.getLayout = (page) => (
+Main.getLayout = ({ page }) => (
   <AuthLayout>
     <SignupLayout>{page}</SignupLayout>
   </AuthLayout>
@@ -49,7 +49,7 @@ export async function getServerSideProps({ req, query }) {
         position_title,
         about,
         uploaded_resume,
-        f_photo
+        f_photo,
       },
     };
   }

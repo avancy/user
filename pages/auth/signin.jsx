@@ -14,7 +14,7 @@ export default function Main() {
   );
 }
 
-Main.getLayout = (page) => <AuthLayout>{page}</AuthLayout>;
+Main.getLayout = ({page}) => <AuthLayout>{page}</AuthLayout>;
 
 export async function getServerSideProps({ req, query }) {
   const { redirect } = query;
