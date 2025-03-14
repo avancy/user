@@ -1,10 +1,19 @@
 import CandidateHomeLayout from '@/components/dashboard/candidate_home_layout';
-import TalentBankManager from '@/lib/interactions/backend/talentbanks';
+import TalentBankManager from '@/lib/interactions/backend/talentbank';
 import { fetchApplicant } from '@/lib/services/server_side_props';
 import TalentBanksView from '@/components/views/talentbanks';
+import { useEffect } from 'react';
 
-export default function Main(props) {
-  return <TalentBanksView {...props} />;
+export default function Main() {
+  const [talentBanks, setTalentBanks] = useState([]);
+
+  useEffect(() => {
+    TalentBankManager.getAll({
+      onSuccess: setTalentBanks,
+    });
+  }, []);
+
+  return <TalentBanksView talent_banks={talentBanks} />;
 }
 
 Main.getLayout = ({ page, page_props }) => (
@@ -49,12 +58,5 @@ export async function getServerSideProps({ req }) {
     };
   }
 
-  let talent_banks = [];
-
-  await TalentBankManager.getAll({
-    applicant_id: applicant.id,
-    onSuccess: (list) => (talent_banks = list),
-  });
-
-  return { props: { applicant, talent_banks: talent_banks } };
+  return { props: { applicant } };
 }

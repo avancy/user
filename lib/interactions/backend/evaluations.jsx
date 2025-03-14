@@ -2,6 +2,17 @@ import { Notify } from '@/components/common/notification';
 import { api } from '@/lib/api';
 
 class Applicant {
+ 
+  /**
+   * @description Get an evaluation by its ID or evaluation ID
+   * @param {object} params
+   * @param {string} [params.evaluation_id] - The evaluation ID
+   * @param {string} [params.id] - The evaluation ID
+   * @param {function} onSuccess - Success callback
+   * @param {function} onError - Error callback
+   * @param {function} onFinally - Finally callback
+   * @returns {Promise<object>} - An evaluation object
+   */
   static async get({ evaluation_id, id, onSuccess, onError, onFinally }) {
     try {
       const endpoint = evaluation_id
@@ -18,6 +29,14 @@ class Applicant {
     }
   }
 
+  /**
+   * @description Get all evaluations for the logged in applicant
+   * @param {object} params
+   * @param {function} onSuccess - Success callback
+   * @param {function} onError - Error callback
+   * @param {function} onFinally - Finally callback
+   * @returns {Promise<object[]>} - An array of evaluation objects
+   */
   static async getAll({ onSuccess, onError, onFinally }) {
     try {
       const { data } = await api.get(`/applicant_evaluations/by_applicant`);
@@ -31,6 +50,16 @@ class Applicant {
     }
   }
 
+  /**
+   * @description Start an evaluation for the logged in applicant
+   * @param {object} params
+   * @param {string} params.id - The evaluation ID
+   * @param {Date|string} params.date - The date and time to start the evaluation
+   * @param {function} onSuccess - Success callback
+   * @param {function} onError - Error callback
+   * @param {function} onFinally - Finally callback
+   * @returns {Promise<object>} - An evaluation object
+   */
   static async start({ id, date, onSuccess, onError, onFinally }) {
     try {
       const { data } = await api.patch(`/applicant_evaluation/start/${id}`, undefined, {
@@ -46,6 +75,16 @@ class Applicant {
     }
   }
 
+  /**
+   * @description Finish an evaluation for the logged in applicant
+   * @param {object} params
+   * @param {string} params.id - The evaluation ID
+   * @param {Date|string} params.date - The date and time to finish the evaluation
+   * @param {function} onSuccess - Success callback
+   * @param {function} onError - Error callback
+   * @param {function} onFinally - Finally callback
+   * @returns {Promise<object>} - An evaluation object
+   */
   static async finish({ id, date, onSuccess, onError, onFinally }) {
     try {
       const { data } = await api.patch(`/applicant_evaluation/finish/${id}`, undefined, {
@@ -88,6 +127,16 @@ class Applicant {
 }
 
 export class EvaluationManager {
+  /**
+   * @description Get all evaluations for a given job or stage
+   * @param {object} params
+   * @param {string} [params.job_id] - The job ID
+   * @param {string} [params.stage_id] - The stage ID
+   * @param {function} onSuccess - Success callback
+   * @param {function} onError - Error callback
+   * @param {function} onFinally - Finally callback
+   * @returns {Promise<object[]>} - An array of evaluations
+   */
   static async getAll({ job_id, stage_id, onSuccess, onError, onFinally }) {
     try {
       let endpoint = '/evaluations/by_applicant';
@@ -107,6 +156,15 @@ export class EvaluationManager {
     }
   }
 
+  /**
+   * @description Get an evaluation by its ID
+   * @param {object} params
+   * @param {string} params.id - The evaluation ID
+   * @param {function} onSuccess - Success callback
+   * @param {function} onError - Error callback
+   * @param {function} onFinally - Finally callback
+   * @returns {Promise<object>} - An evaluation object
+   */
   static async get({ id, onSuccess, onError, onFinally }) {
     try {
       const { data } = await api.get(`/evaluations/by_id/${id}`);
